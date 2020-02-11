@@ -12,10 +12,7 @@ CParseTree::~CParseTree()
 {
 }
 
-void CParseTree::SayHello(char* const msg) const
-{
-	std::cout << "Msg from CParseTree: " << msg << std::endl;
-}
+
 int CParseTree::RunParser(const std::string& filename)
 {
 	int rlt;
@@ -53,19 +50,3 @@ int CParseTree::RunParser(const std::string& filename)
 }
 
 
-void CParseTree::copy_cstr(char** pTarget, const char* pSource)
-{
-	size_t size = strlen(pSource) + 1;
-	*pTarget = new char[size];
-	strcpy_s(*pTarget, size, pSource);
-}
-
-void CParseTree::copy_int(int& Target, const char* pSource)
-{
-	Target = atoi(pSource);
-}
-
-ASTnode* CParseTree::newnode(int nodetype, ASTnode* left, ASTnode* right)
-{
-	return new ASTnode(nodetype, left, right);
-}

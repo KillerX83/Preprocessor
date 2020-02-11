@@ -11,7 +11,7 @@ public:
 
 	int RunParser(const std::string& filename = "");
 
-
+	void TreeFree(ASTnode* start);
 
 	ASTnode* newnode(int nodetype, ASTnode* left, ASTnode* right);
 	ASTnode* newsym(const char* id, ASTnode* FirstIndex, ASTnode* Secondindex);

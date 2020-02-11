@@ -105,7 +105,7 @@
 %%
 
 program: %empty
-	| program statement { GenCode($2); TreeFree($2); }
+	| program statement { $2->GenCode; cParseTree.TreeFree($2); }
 	;
 	
 statement: CleanString { $$ = pParseTree.newclean($1); }

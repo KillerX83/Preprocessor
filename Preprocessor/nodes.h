@@ -1,46 +1,95 @@
 #pragma once
-
-struct ASTnode
+extern enum class TYPE;
+class ASTnode
 {
+public:
 	ASTnode* m_left;
 	ASTnode* m_rigth;
-	int nodetype;
+	int m_nodetype;
+
+public:
+	ASTnode(ASTnode* left, ASTnode* right);
+	void virtual GenCode();
 };
 
-struct FORnode
+class FORnode : public ASTnode
 {
-	const int nodetype = 'F';
+public:
+	const int m_nodetype = 'F';
 	char* m_id;
 	ASTnode* m_FirstIndex;
 	ASTnode* m_SecondIndex;
+
+public:
+	FORnode(const char* id, ASTnode* FirstIndex, ASTnode* Secondindex);
+	void GenCode() override;
 };
-struct DEFnode
+class DEFnode : public ASTnode
 {
-	const int nodetype = 'D';
+public:
+	const int m_nodetype = 'D';
 	ASTnode* m_variable;
+	TYPE m_type;
 	ASTnode* m_nextdef;
+
+public:
+	DEFnode(ASTnode* variable, TYPE type, ASTnode* nextdef);
+	void GenCode() override;
 };
-struct READnode
+class READnode : public ASTnode
 {
-	const int nodetype = 'R';
+public:
+	const int m_nodetype = 'R';
 	ASTnode* m_variable;
 	ASTnode* m_nextread;
+
+public:
+	READnode(ASTnode* variable, ASTnode* nextread);
+	void GenCode() override;
 };
 
-struct SYMnode
+class SYMnode : public ASTnode
 {
-	const int nodetype = 'S';
-	char* id;
-	ASTnode* FirstIndex;
-	ASTnode* SecondIndex;
+public:
+	const int m_nodetype = 'S';
+	char* m_id;
+	ASTnode* m_FirstIndex;
+	ASTnode* m_SecondIndex;
+
+public:
+	SYMnode(char* id, ASTnode* FirstIndex, ASTnode* SecondIndex);
+	void GenCode() override;
 };
 
-struct ASNnode
+class ASNnode : public ASTnode
 {
+public:
+	const int m_nodetype = 'A';
+	ASTnode* m_variable;
+	ASTnode* value;
 
+public:
+	void GenCode() override;
 };
 
-struct CLEANnode
+class CLEANnode : public ASTnode
 {
+public:
+	const int m_nodetype = 'C';
+	char* m_str;
 
+public:
+	CLEANnode(char* str);
+	void GenCode() override;
+};
+
+class NUMnode : public ASTnode
+{
+public:
+	const int m_nodetype = 'N';
+	double m_value;
+
+public:
+	NUMnode(double value);
+	void GenCode() override;
 };
