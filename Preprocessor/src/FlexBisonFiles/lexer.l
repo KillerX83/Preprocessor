@@ -54,21 +54,23 @@ CHARS	[a-zA-Z]+
 
 
 
-"#" |
-","	|
-"(" |
-"+" |
-"-" |
-"*" |
-"/" |
-"&" |
-"=" |
+"#"  |
+","	 |
+"("  |
+"+"  |
+"-"  |
+"*"  |
+"/"  |
+"&"  |
+"="  |
+"\n" |
 ")" { return yytext[0];}
 
 "def" { return def; }
 "read" { return read; }
 "for" { return for; }
 "to" { return to; }
+"next" { return next; }
 "int" { yylval.TYPE = 0; return int; }
 "real" { yylval.TYPE = 1; return real; }
 
@@ -80,7 +82,6 @@ CHARS	[a-zA-Z]+
 "debug_off"	{ return TKN_DEBUG_OFF; }
 
 [ \t] {}
-\n	{ return yytext[0]; }
 
 .+\n { return CleanString}
 

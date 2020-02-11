@@ -7,8 +7,7 @@
 	// for location tracking support
 %locations
 
-	// Generate the parser description file
-%verbose
+
 
 	// Enable run-time trace
 %define parse.trace
@@ -76,23 +75,23 @@
 	int intg;
 	char* cstr;
 	double dbl;
-	node* ASTnode;
-	enum class { INTG=0, DBL} TYPE;
+	ASTnode* node;
+	enum class TYPE { INTG=0, DBL} ;
 }
 	// attach TKN_ prefix to the user defined 
 	// token type
 %define api.token.prefix {TKN_}
 
 %token	DEBUG_ON DEBUG_OFF
-%token '#' '&'  ',' CleanString for next to
+%token '#' '&'  ',' '\n' CleanString for next to
 %token <cstr> identifier
 %token <dbl>  constant
 %token <TYPE> type
 %right '='
 %left '+' '-'
 %left '*' '/'
-%type<ASTnode> statement expression def read 
-%type<ASTnode> list variable value CleanString
+%type<node> statement expression def read 
+%type<node> list variable value CleanString
 
 	// for parser debugging and tracing use
 	//%printer { fprintf(yyoutput, "--- %s", $$); } <cstr>
@@ -111,8 +110,8 @@ program: %empty
 	
 statement: CleanString { $$ = pParseTree.newclean($1); }
 	| '#' for identifier '=' expression to expression '\n' list '#' next { $$ = pParseTree.newfor($3, $5, $7, $9); }
-	| '#' def { $$ = $2; }
-	| '#' read { $$ = $2; }
+	| '#' def '\n' { $$ = $2; }
+	| '#' read '\n' { $$ = $2; }
 	;
 
 def: variable type { $$ = pParseTree.newdef($1, NULL); }
@@ -134,7 +133,7 @@ expression: value	{ $$ = $1 }
 	;
 
 list: %empty { $$ = NULL; }
-	| statement  list { 
+	| statement list { 
 		if ($2 == NULL)
 			$$ = $1;
 			else

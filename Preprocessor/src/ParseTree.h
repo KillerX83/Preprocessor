@@ -11,11 +11,15 @@ public:
 
 	int RunParser(const std::string& filename = "");
 
-	void SayHello(char* const msg) const;
 
-	void copy_cstr(char** pTarget, const char* pSource);
-	void copy_int(int& Target, const char* pSource);
 
 	ASTnode* newnode(int nodetype, ASTnode* left, ASTnode* right);
+	ASTnode* newsym(const char* id, ASTnode* FirstIndex, ASTnode* Secondindex);
+	ASTnode* newnum(double value);
+	ASTnode* newfor(const char* id, ASTnode* start, ASTnode* end, ASTnode* body);
+	ASTnode* newread(ASTnode* variable, ASTnode* nextread);
+	ASTnode* newdef(ASTnode* variable, ASTnode* nextdef);
+	ASTnode* newasn(ASTnode* variable, ASTnode*	value);
+	ASTnode* newclean(ASTnode* clean);
 };
 

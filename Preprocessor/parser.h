@@ -44,7 +44,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 37 "src\\FlexBisonFiles\\parser.y"
+#line 36 "src\\FlexBisonFiles\\parser.y"
 
 	#pragma warning (disable: 4005)
 
@@ -82,13 +82,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 75 "src\\FlexBisonFiles\\parser.y"
+#line 74 "src\\FlexBisonFiles\\parser.y"
 	
 	int intg;
 	char* cstr;
 	double dbl;
-	node* ASTnode;
-	enum class { INTG=0, DBL} TYPE;
+	ASTnode* node;
+	enum class TYPE { INTG=0, DBL} ;
 
 #line 94 "parser.h"
 
