@@ -64,3 +64,8 @@ void CParseTree::copy_int(int& Target, const char* pSource)
 {
 	Target = atoi(pSource);
 }
+
+ASTnode* CParseTree::newnode(int nodetype, ASTnode* left, ASTnode* right)
+{
+	return new ASTnode(nodetype, left, right);
+}

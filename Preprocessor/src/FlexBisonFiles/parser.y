@@ -39,12 +39,13 @@
 
 	#include <iostream>
 	#include <cstdio>
-
+	#include "nodes.h"
 	#include "ParseTree.h"
 		
 	using namespace std;
 
 	typedef void* yyscan_t;
+
 
 }
 
@@ -74,72 +75,82 @@
 {	
 	int intg;
 	char* cstr;
-	double d;
+	double dbl;
 	node* ASTnode;
+	enum class { INTG=0, DBL} TYPE;
 }
 	// attach TKN_ prefix to the user defined 
 	// token type
 %define api.token.prefix {TKN_}
 
 %token	DEBUG_ON DEBUG_OFF
-%type<ASTnode> program stmt expression def read list 
+%token '#' '&'  ',' CleanString for next to
+%token <cstr> identifier
+%token <dbl>  constant
+%token <TYPE> type
+%right '='
+%left '+' '-'
+%left '*' '/'
+%type<ASTnode> statement expression def read 
+%type<ASTnode> list variable value CleanString
 
 	// for parser debugging and tracing use
-%printer { fprintf(yyoutput, "--- %s", $$); } <cstr>
+	//%printer { fprintf(yyoutput, "--- %s", $$); } <cstr>
 
 	// for destructors' to call when parser' stack unwinding
 	// these routines are called only when error recovery by bison
-%destructor { std::cout<<$$<<" is deleted"; delete[] $$; $$ = nullptr;  } <cstr>
+	//%destructor { std::cout<<$$<<" is deleted"; delete[] $$; $$ = nullptr;  } <cstr>
 
 %start program
 
 %%
 
 program: %empty
-	| program statement
+	| program statement { GenCode($2); TreeFree($2); }
 	;
 	
-statement: CleanString
-	| '#' for identifier '=' expression to expression '\n' list #next
-	| '#' def
-	| '#' read
+statement: CleanString { $$ = pParseTree.newclean($1); }
+	| '#' for identifier '=' expression to expression '\n' list '#' next { $$ = pParseTree.newfor($3, $5, $7, $9); }
+	| '#' def { $$ = $2; }
+	| '#' read { $$ = $2; }
 	;
 
-def: variable type
-	| variable type ',' def
+def: variable type { $$ = pParseTree.newdef($1, NULL); }
+	| variable type ',' def { $$ = pParseTree.newdef($1, $2); }
 	;
 
-read: variable
-	| variable ',' read
+read: variable { $$ = pParseTree.newread($1, NULL); }
+	| variable ',' read { $$ = pParseTree.newread($1, $3); }
 	;
 
-expression: value
-	| variable
-	| expression '+' expression
-	| expression '-' expression
-	| expression '*' expression
-	| expression '/' expression
-	| '(' expression ')'
+expression: value	{ $$ = $1 }
+	| variable		{ $$ = $1 }
+	| expression '+' expression { $$ = pParseTree.newnode('+', $1, $3); }
+	| expression '-' expression	{ $$ = pParseTree.newnode('-', $1, $3); }
+	| expression '*' expression	{ $$ = pParseTree.newnode('*', $1, $3); }
+	| expression '/' expression	{ $$ = pParseTree.newnode('/', $1, $3); }
+	| '(' expression ')'		{ $$ = $2; }
+	| variable '=' expression { $$ = pParseTree.newasn('=', $1, $3); }
 	;
 
-list: %empty
-	| stmt list
+list: %empty { $$ = NULL; }
+	| statement  list { 
+		if ($2 == NULL)
+			$$ = $1;
+			else
+			$$ = pParseTree.newnode('L', $1, $2);
+		}
+	;
+value: constant	{ $$ = pParseTree.newnum($1); }
+	| '&' variable  { $$ = $2; }
 	;
 
-value: constant
-	| '&' variable
-	;
-
-variable: identifier
-	| identifier '(' expression ')'
-	| identifier '(' expression ',' expression ')'
+variable: identifier { $$ = pParseTree.newref($1, NULL, NULL); }
+	| identifier '(' expression ')' { $$ = pParseTree.newref($1, $3, NULL); }
+	| identifier '(' expression ',' expression ')' { $$ = pParseTree.newref($1, $3, $5); }
 	;
 
 
-
-	
-	// #def varname
-	// #def varname2(varname)
 %%
 
 // newer yyerror() function definition

@@ -48,23 +48,40 @@
 }
 
 INTG	[0-9]+
+FLOAT	[0-9]+.[0-9]+
 CHARS	[a-zA-Z]+
 %%
 
-{INTG}		{ 
-				yyextra->copy_int(yylval->intg, yytext);
-				return TKN_INTG; }
+
+
+"#" |
+","	|
+"(" |
+"+" |
+"-" |
+"*" |
+"/" |
+"&" |
+"=" |
+")" { return yytext[0];}
+
+"def" { return def; }
+"read" { return read; }
+"for" { return for; }
+"to" { return to; }
+"int" { yylval.TYPE = 0; return int; }
+"real" { yylval.TYPE = 1; return real; }
+
+{CHARS}+ { return identifier; }
+{INTG}	{ yylval.intg = atoi(yytext); return constant; }
+{FLOAT} { yylval.dbl = atof(yytext); return constant; }
 
 "debug_on"	{ return TKN_DEBUG_ON; }
 "debug_off"	{ return TKN_DEBUG_OFF; }
 
-\n			{ return yytext[0]; }
-{CHARS}		{ 
-				// yyextra is pointer to pParseTree
-				yyextra->copy_cstr(&yylval->cstr, yytext);
+[ \t] {}
+\n	{ return yytext[0]; }
 
-				return TKN_CSTR;
-			}
-.
+.+\n { return CleanString}
 
 %%

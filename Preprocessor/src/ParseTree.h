@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-
+#include "nodes.h"
 #include <vector>
 
 class CParseTree
@@ -15,5 +15,7 @@ public:
 
 	void copy_cstr(char** pTarget, const char* pSource);
 	void copy_int(int& Target, const char* pSource);
+
+	ASTnode* newnode(int nodetype, ASTnode* left, ASTnode* right);
 };
 

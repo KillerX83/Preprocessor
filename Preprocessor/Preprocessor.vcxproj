@@ -180,6 +180,7 @@
   <ItemGroup>
     <ClCompile Include="Generated Files\Source Files\lexer.cpp" />
     <ClCompile Include="Generated Files\Source Files\parser.cpp" />
+    <ClCompile Include="nodes.cpp" />
     <ClCompile Include="src\ParseTree.cpp">
       <SubType>
       </SubType>
@@ -188,14 +189,17 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="SymbolTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Generated Files\Header Files\lexer.h" />
     <ClInclude Include="Generated Files\Header Files\parser.h" />
+    <ClInclude Include="nodes.h" />
     <ClInclude Include="src\ParseTree.h">
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="SymbolTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
