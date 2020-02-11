@@ -1,0 +1,165 @@
+Grammar
+
+    0 $accept: program $end
+
+    1 program: %empty
+    2        | program line
+
+    3 line: '\n'
+    4     | expr '\n'
+    5     | "c-string" '\n'
+    6     | DEBUG_ON '\n'
+    7     | DEBUG_OFF '\n'
+    8     | error '\n'
+
+    9 expr: "integer"
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '\n' (10) 3 4 5 6 7 8
+    error (256) 8
+    "integer" <intg> (258) 9
+    "c-string" <cstr> (259) 5
+    DEBUG_ON (260) 6
+    DEBUG_OFF (261) 7
+
+
+Nonterminals, with rules where they appear
+
+    $accept (8)
+        on left: 0
+    program (9)
+        on left: 1 2
+        on right: 0 2
+    line (10)
+        on left: 3 4 5 6 7 8
+        on right: 2
+    expr <intg> (11)
+        on left: 9
+        on right: 4
+
+
+State 0
+
+    0 $accept: . program $end
+
+    $default  reduce using rule 1 (program)
+
+    program  go to state 1
+
+
+State 1
+
+    0 $accept: program . $end
+    2 program: program . line
+
+    $end        shift, and go to state 2
+    error       shift, and go to state 3
+    "integer"   shift, and go to state 4
+    "c-string"  shift, and go to state 5
+    DEBUG_ON    shift, and go to state 6
+    DEBUG_OFF   shift, and go to state 7
+    '\n'        shift, and go to state 8
+
+    line  go to state 9
+    expr  go to state 10
+
+
+State 2
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 3
+
+    8 line: error . '\n'
+
+    '\n'  shift, and go to state 11
+
+
+State 4
+
+    9 expr: "integer" .
+
+    $default  reduce using rule 9 (expr)
+
+
+State 5
+
+    5 line: "c-string" . '\n'
+
+    '\n'  shift, and go to state 12
+
+
+State 6
+
+    6 line: DEBUG_ON . '\n'
+
+    '\n'  shift, and go to state 13
+
+
+State 7
+
+    7 line: DEBUG_OFF . '\n'
+
+    '\n'  shift, and go to state 14
+
+
+State 8
+
+    3 line: '\n' .
+
+    $default  reduce using rule 3 (line)
+
+
+State 9
+
+    2 program: program line .
+
+    $default  reduce using rule 2 (program)
+
+
+State 10
+
+    4 line: expr . '\n'
+
+    '\n'  shift, and go to state 15
+
+
+State 11
+
+    8 line: error '\n' .
+
+    $default  reduce using rule 8 (line)
+
+
+State 12
+
+    5 line: "c-string" '\n' .
+
+    $default  reduce using rule 5 (line)
+
+
+State 13
+
+    6 line: DEBUG_ON '\n' .
+
+    $default  reduce using rule 6 (line)
+
+
+State 14
+
+    7 line: DEBUG_OFF '\n' .
+
+    $default  reduce using rule 7 (line)
+
+
+State 15
+
+    4 line: expr '\n' .
+
+    $default  reduce using rule 4 (line)
