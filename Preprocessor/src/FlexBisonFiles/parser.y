@@ -74,16 +74,15 @@
 {	
 	int intg;
 	char* cstr;
+	double d;
+	node* ASTnode;
 }
 	// attach TKN_ prefix to the user defined 
 	// token type
 %define api.token.prefix {TKN_}
 
-%token<intg> INTG "integer"
-%token<cstr> CSTR "c-string"
 %token	DEBUG_ON DEBUG_OFF
-
-%type<intg> expr
+%type<ASTnode> program stmt expression def read list 
 
 	// for parser debugging and tracing use
 %printer { fprintf(yyoutput, "--- %s", $$); } <cstr>
@@ -97,23 +96,50 @@
 %%
 
 program: %empty
-	| program line
+	| program statement
 	;
 	
-line: '\n'
-	| expr '\n'		{ cout << "Parsed: "<<$expr<<endl ;}
-	| CSTR '\n'		{	
-						pParseTree->SayHello($1); 
-						delete[] $1; $1=nullptr;  
-					}
-	| DEBUG_ON '\n' { yydebug = 1; }
-	| DEBUG_OFF '\n' { yydebug = 0; }
-	| error '\n'	{ yyerrok; }
-	; 
-
-expr:  "integer"	{ $$ = $1; }
+statement: CleanString
+	| '#' for identifier '=' expression to expression '\n' list #next
+	| '#' def
+	| '#' read
 	;
 
+def: variable type
+	| variable type ',' def
+	;
+
+read: variable
+	| variable ',' read
+	;
+
+expression: value
+	| variable
+	| expression '+' expression
+	| expression '-' expression
+	| expression '*' expression
+	| expression '/' expression
+	| '(' expression ')'
+	;
+
+list: %empty
+	| stmt list
+	;
+
+value: constant
+	| '&' variable
+	;
+
+variable: identifier
+	| identifier '(' expression ')'
+	| identifier '(' expression ',' expression ')'
+	;
+
+
+
+	
+	// #def varname
+	// #def varname2(varname)
 %%
 
 // newer yyerror() function definition
