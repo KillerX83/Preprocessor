@@ -49,4 +49,50 @@ int CParseTree::RunParser(const std::string& filename)
 	return rlt;
 }
 
+void CParseTree::TreeFree(ASTnode* start)
+{
+}
+
+ASTnode* CParseTree::newnode(int nodetype, ASTnode* left, ASTnode* right)
+{
+	return new ASTnode(nodetype, left, right);
+}
+
+ASTnode* CParseTree::newsym(const char* id, ASTnode* FirstIndex, ASTnode* Secondindex)
+{
+	return new SYMnode(id, FirstIndex, Secondindex);
+}
+
+ASTnode* CParseTree::newnum(double value)
+{
+	return new NUMnode(value);
+}
+
+ASTnode* CParseTree::newfor(const char* id, ASTnode* start, ASTnode* end, ASTnode* body)
+{
+	return new FORnode(id, start, end, body);
+}
+
+ASTnode* CParseTree::newread(ASTnode* variable, ASTnode* nextread)
+{
+	return new READnode(variable, nextread);
+}
+
+ASTnode* CParseTree::newdef(ASTnode* variable, ASTnode* nextdef)
+{
+	return new DEFnode(variable, nextdef);
+}
+
+ASTnode* CParseTree::newasn(ASTnode* variable, ASTnode* value)
+{
+	return new ASNnode(variable, value);
+}
+
+ASTnode* CParseTree::newclean(ASTnode* clean)
+{
+	return new CLEANnode(clean);
+}
+
+
+
 

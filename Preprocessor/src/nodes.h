@@ -8,8 +8,8 @@ public:
 	int m_nodetype;
 
 public:
-	ASTnode(ASTnode* left, ASTnode* right);
-	void virtual GenCode();
+	ASTnode(int nodetype, ASTnode* left, ASTnode* rigth);
+	void virtual Action();
 };
 
 class FORnode : public ASTnode
@@ -22,7 +22,7 @@ public:
 
 public:
 	FORnode(const char* id, ASTnode* FirstIndex, ASTnode* Secondindex);
-	void GenCode() override;
+	void Action() override;
 };
 class DEFnode : public ASTnode
 {
@@ -34,7 +34,7 @@ public:
 
 public:
 	DEFnode(ASTnode* variable, TYPE type, ASTnode* nextdef);
-	void GenCode() override;
+	void Action() override;
 };
 class READnode : public ASTnode
 {
@@ -45,7 +45,7 @@ public:
 
 public:
 	READnode(ASTnode* variable, ASTnode* nextread);
-	void GenCode() override;
+	void Action() override;
 };
 
 class SYMnode : public ASTnode
@@ -58,7 +58,7 @@ public:
 
 public:
 	SYMnode(char* id, ASTnode* FirstIndex, ASTnode* SecondIndex);
-	void GenCode() override;
+	void Action() override;
 };
 
 class ASNnode : public ASTnode
@@ -66,10 +66,11 @@ class ASNnode : public ASTnode
 public:
 	const int m_nodetype = 'A';
 	ASTnode* m_variable;
-	ASTnode* value;
+	ASTnode* m_value;
 
 public:
-	void GenCode() override;
+	ASNnode(ASTnode* variable, ASTnode* value);
+	void Action() override;
 };
 
 class CLEANnode : public ASTnode
@@ -80,7 +81,7 @@ public:
 
 public:
 	CLEANnode(char* str);
-	void GenCode() override;
+	void Action() override;
 };
 
 class NUMnode : public ASTnode
@@ -91,5 +92,5 @@ public:
 
 public:
 	NUMnode(double value);
-	void GenCode() override;
+	void Action() override;
 };

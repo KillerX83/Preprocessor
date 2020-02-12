@@ -21,7 +21,10 @@
     <ClCompile Include="src\ReentrantApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SymbolTable.cpp">
+    <ClCompile Include="src\nodes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SymbolTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,10 +32,10 @@
     <ClInclude Include="src\ParseTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="nodes.h">
+    <ClInclude Include="src\nodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SymbolTable.h">
+    <ClInclude Include="src\SymbolTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

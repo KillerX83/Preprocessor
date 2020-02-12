@@ -2,6 +2,7 @@
 #include <string>
 #include "nodes.h"
 #include <vector>
+#include "SymbolTable.h"
 
 class CParseTree
 {
@@ -21,5 +22,7 @@ public:
 	ASTnode* newdef(ASTnode* variable, ASTnode* nextdef);
 	ASTnode* newasn(ASTnode* variable, ASTnode*	value);
 	ASTnode* newclean(ASTnode* clean);
+
+	SymbolTable table;
 };
 

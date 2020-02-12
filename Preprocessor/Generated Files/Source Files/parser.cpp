@@ -98,7 +98,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 37 "src\\FlexBisonFiles\\parser.y"
+#line 36 "src\\FlexBisonFiles\\parser.y"
 
 	#pragma warning (disable: 4005)
 
@@ -136,13 +136,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 75 "src\\FlexBisonFiles\\parser.y"
+#line 74 "src\\FlexBisonFiles\\parser.y"
 	
 	int intg;
 	char* cstr;
 	double dbl;
-	node* ASTnode;
-	enum class { INTG=0, DBL} TYPE;
+	ASTnode* node;
+	enum class TYPE { INTG=0, DBL} ;
 
 #line 148 "parser.cpp"
 
@@ -174,7 +174,7 @@ int yyparse (yyscan_t scanner, CParseTree* pParseTree);
 
 
 /* Unqualified %code blocks.  */
-#line 54 "src\\FlexBisonFiles\\parser.y"
+#line 53 "src\\FlexBisonFiles\\parser.y"
 
 	
 	typedef void* yyscan_t;
@@ -476,9 +476,9 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,   108,   108,   109,   112,   113,   114,   115,   118,   119,
-     122,   123,   126,   127,   128,   129,   130,   131,   132,   133,
-     136,   137,   144,   145,   148,   149,   150
+       0,   107,   107,   108,   111,   112,   113,   114,   117,   118,
+     121,   122,   125,   126,   127,   128,   129,   130,   131,   132,
+     135,   136,   143,   144,   147,   148,   149
 };
 #endif
 
@@ -1206,7 +1206,7 @@ YYLTYPE yylloc = yyloc_default;
   yychar = YYEMPTY; /* Cause a token to be read.  */
 
 /* User initialization code.  */
-#line 64 "src\\FlexBisonFiles\\parser.y"
+#line 63 "src\\FlexBisonFiles\\parser.y"
 {
 	/* code for initialization before parsing 
 		code in this block is executed each time yyparse is called. */
@@ -1407,151 +1407,151 @@ yyreduce:
   switch (yyn)
     {
   case 3:
-#line 109 "src\\FlexBisonFiles\\parser.y"
-    { GenCode((yyvsp[0].ASTnode)); TreeFree((yyvsp[0].ASTnode)); }
+#line 108 "src\\FlexBisonFiles\\parser.y"
+    { GenCode((yyvsp[0].node)); TreeFree((yyvsp[0].node)); }
 #line 1413 "parser.cpp"
     break;
 
   case 4:
-#line 112 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = pParseTree.newclean((yyvsp[0].ASTnode)); }
+#line 111 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = pParseTree.newclean((yyvsp[0].node)); }
 #line 1419 "parser.cpp"
     break;
 
   case 5:
-#line 113 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = pParseTree.newfor((yyvsp[-8].cstr), (yyvsp[-6].ASTnode), (yyvsp[-4].ASTnode), (yyvsp[-2].ASTnode)); }
+#line 112 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = pParseTree.newfor((yyvsp[-8].cstr), (yyvsp[-6].node), (yyvsp[-4].node), (yyvsp[-2].node)); }
 #line 1425 "parser.cpp"
     break;
 
   case 6:
-#line 114 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = (yyvsp[-1].ASTnode); }
+#line 113 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = (yyvsp[-1].node); }
 #line 1431 "parser.cpp"
     break;
 
   case 7:
-#line 115 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = (yyvsp[-1].ASTnode); }
+#line 114 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = (yyvsp[-1].node); }
 #line 1437 "parser.cpp"
     break;
 
   case 8:
-#line 118 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = pParseTree.newdef((yyvsp[-1].ASTnode), NULL); }
+#line 117 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = pParseTree.newdef((yyvsp[-1].node), NULL); }
 #line 1443 "parser.cpp"
     break;
 
   case 9:
-#line 119 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = pParseTree.newdef((yyvsp[-3].ASTnode), (yyvsp[-2].TYPE)); }
+#line 118 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = pParseTree.newdef((yyvsp[-3].node), (yyvsp[-2].TYPE)); }
 #line 1449 "parser.cpp"
     break;
 
   case 10:
-#line 122 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = pParseTree.newread((yyvsp[0].ASTnode), NULL); }
+#line 121 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = pParseTree.newread((yyvsp[0].node), NULL); }
 #line 1455 "parser.cpp"
     break;
 
   case 11:
-#line 123 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = pParseTree.newread((yyvsp[-2].ASTnode), (yyvsp[0].ASTnode)); }
+#line 122 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = pParseTree.newread((yyvsp[-2].node), (yyvsp[0].node)); }
 #line 1461 "parser.cpp"
     break;
 
   case 12:
-#line 126 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = (yyvsp[0].ASTnode) }
+#line 125 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = (yyvsp[0].node) }
 #line 1467 "parser.cpp"
     break;
 
   case 13:
-#line 127 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = (yyvsp[0].ASTnode) }
+#line 126 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = (yyvsp[0].node) }
 #line 1473 "parser.cpp"
     break;
 
   case 14:
-#line 128 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = pParseTree.newnode('+', (yyvsp[-2].ASTnode), (yyvsp[0].ASTnode)); }
+#line 127 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = pParseTree.newnode('+', (yyvsp[-2].node), (yyvsp[0].node)); }
 #line 1479 "parser.cpp"
     break;
 
   case 15:
-#line 129 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = pParseTree.newnode('-', (yyvsp[-2].ASTnode), (yyvsp[0].ASTnode)); }
+#line 128 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = pParseTree.newnode('-', (yyvsp[-2].node), (yyvsp[0].node)); }
 #line 1485 "parser.cpp"
     break;
 
   case 16:
-#line 130 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = pParseTree.newnode('*', (yyvsp[-2].ASTnode), (yyvsp[0].ASTnode)); }
+#line 129 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = pParseTree.newnode('*', (yyvsp[-2].node), (yyvsp[0].node)); }
 #line 1491 "parser.cpp"
     break;
 
   case 17:
-#line 131 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = pParseTree.newnode('/', (yyvsp[-2].ASTnode), (yyvsp[0].ASTnode)); }
+#line 130 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = pParseTree.newnode('/', (yyvsp[-2].node), (yyvsp[0].node)); }
 #line 1497 "parser.cpp"
     break;
 
   case 18:
-#line 132 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = (yyvsp[-1].ASTnode); }
+#line 131 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = (yyvsp[-1].node); }
 #line 1503 "parser.cpp"
     break;
 
   case 19:
-#line 133 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = pParseTree.newasn('=', (yyvsp[-2].ASTnode), (yyvsp[0].ASTnode)); }
+#line 132 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = pParseTree.newasn('=', (yyvsp[-2].node), (yyvsp[0].node)); }
 #line 1509 "parser.cpp"
     break;
 
   case 20:
-#line 136 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = NULL; }
+#line 135 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = NULL; }
 #line 1515 "parser.cpp"
     break;
 
   case 21:
-#line 137 "src\\FlexBisonFiles\\parser.y"
+#line 136 "src\\FlexBisonFiles\\parser.y"
     { 
-		if ((yyvsp[0].ASTnode) == NULL)
-			(yyval.ASTnode) = (yyvsp[-1].ASTnode);
+		if ((yyvsp[0].node) == NULL)
+			(yyval.node) = (yyvsp[-1].node);
 			else
-			(yyval.ASTnode) = pParseTree.newnode('L', (yyvsp[-1].ASTnode), (yyvsp[0].ASTnode));
+			(yyval.node) = pParseTree.newnode('L', (yyvsp[-1].node), (yyvsp[0].node));
 		}
 #line 1526 "parser.cpp"
     break;
 
   case 22:
-#line 144 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = pParseTree.newnum((yyvsp[0].dbl)); }
+#line 143 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = pParseTree.newnum((yyvsp[0].dbl)); }
 #line 1532 "parser.cpp"
     break;
 
   case 23:
-#line 145 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = (yyvsp[0].ASTnode); }
+#line 144 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = (yyvsp[0].node); }
 #line 1538 "parser.cpp"
     break;
 
   case 24:
-#line 148 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = pParseTree.newref((yyvsp[0].cstr), NULL, NULL); }
+#line 147 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = pParseTree.newref((yyvsp[0].cstr), NULL, NULL); }
 #line 1544 "parser.cpp"
     break;
 
   case 25:
-#line 149 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = pParseTree.newref((yyvsp[-3].cstr), (yyvsp[-1].ASTnode), NULL); }
+#line 148 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = pParseTree.newref((yyvsp[-3].cstr), (yyvsp[-1].node), NULL); }
 #line 1550 "parser.cpp"
     break;
 
   case 26:
-#line 150 "src\\FlexBisonFiles\\parser.y"
-    { (yyval.ASTnode) = pParseTree.newref((yyvsp[-5].cstr), (yyvsp[-3].ASTnode), (yyvsp[-1].ASTnode)); }
+#line 149 "src\\FlexBisonFiles\\parser.y"
+    { (yyval.node) = pParseTree.newref((yyvsp[-5].cstr), (yyvsp[-3].node), (yyvsp[-1].node)); }
 #line 1556 "parser.cpp"
     break;
 
@@ -1794,7 +1794,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 154 "src\\FlexBisonFiles\\parser.y"
+#line 153 "src\\FlexBisonFiles\\parser.y"
 
 
 // newer yyerror() function definition

@@ -178,6 +178,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\nodes.cpp" />
     <ClCompile Include="src\ParseTree.cpp">
       <SubType>
       </SubType>
@@ -186,15 +187,15 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="SymbolTable.cpp" />
+    <ClCompile Include="src\SymbolTable.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="nodes.h" />
+    <ClInclude Include="src\nodes.h" />
     <ClInclude Include="src\ParseTree.h">
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="SymbolTable.h" />
+    <ClInclude Include="src\SymbolTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
