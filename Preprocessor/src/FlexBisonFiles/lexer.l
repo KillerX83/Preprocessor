@@ -1,6 +1,5 @@
 	// output file definitions
 %option outfile="lexer.cpp" header-file="lexer.h"
-
 	// 8 bit scanner for unicode processing
 	// reentrant scanner
 %option 8bit reentrant noyywrap
@@ -41,48 +40,65 @@
 	#include <iostream>
 	#include <cmath>
 	#include <cstring>
+	#include <stdio.h>
 	
 	using namespace std;
 
 	#include "parser.h"
+	static int braces = 0;
 }
 
 INTG	[0-9]+
-FLOAT	[0-9]+.[0-9]+
-CHARS	[a-zA-Z]+
+FLOAT	[0-9]+\.[0-9]+
+ID	[a-zA-Z]+
+STRING [^#\t&\n ][^\n&]*
+%s operator
+%s substitution
 %%
 
+<operator,INITIAL,substitution>[\t ]+
+<INITIAL>"#" { BEGIN(operator); return '#'; }
+<INITIAL>{STRING} { printf("%s ", yytext); return TKN_string; }
+<operator,INITIAL>"\n" { BEGIN(INITIAL); printf("\n\nLINE %d\n\n", yylineno); return '\n'; }
+"&" { BEGIN(substitution); return '&';}
 
 
-"#"  |
-","	 |
-"("  |
+<substitution>"(" { braces++; return '('; }
+
+<substitution>{ID} { 
+	if (braces == 0) BEGIN(INITIAL);
+	return TKN_identifier; 
+}
+<substitution>{ID}/"(" { 
+	return TKN_identifier; 
+}
+<substitution>")" { braces--; if (braces == 0) BEGIN(INITIAL); return ')'; }
+
+<operator,substitution>"," |
 "+"  |
 "-"  |
 "*"  |
 "/"  |
-"&"  |
-"="  |
-"\n" |
-")" { return yytext[0];}
+"="   { return yytext[0];}
 
-"def" { return def; }
-"read" { return read; }
-"for" { return for; }
-"to" { return to; }
-"next" { return next; }
-"int" { yylval.TYPE = 0; return int; }
-"real" { yylval.TYPE = 1; return real; }
+<operator>"(" |
+")" { return yytext[0]; }
 
-{CHARS}+ { return identifier; }
-{INTG}	{ yylval.intg = atoi(yytext); return constant; }
-{FLOAT} { yylval.dbl = atof(yytext); return constant; }
+<operator>"def" { return TKN_def; }
+<operator>"read" { return TKN_read; }
+<operator>"for" { return TKN_for; }
+<operator>"to" { return TKN_to; }
+<operator>"next" { return TKN_next; }
+<operator>"int" {return TKN_type; }
+<operator>"real" {return TKN_type; }
 
-"debug_on"	{ return TKN_DEBUG_ON; }
-"debug_off"	{ return TKN_DEBUG_OFF; }
 
-[ \t] {}
 
-.+\n { return CleanString}
+<operator>{ID} { return TKN_identifier; }
+<operator,substitution>{INTG}	{ return TKN_constant; }
+<operator,substitution>{FLOAT} { return TKN_constant; }
+
+
+
 
 %%

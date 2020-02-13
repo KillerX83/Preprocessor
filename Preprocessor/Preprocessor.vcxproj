@@ -178,6 +178,8 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="lexer.cpp" />
+    <ClCompile Include="parser.cpp" />
     <ClCompile Include="src\nodes.cpp" />
     <ClCompile Include="src\ParseTree.cpp">
       <SubType>
@@ -190,6 +192,8 @@
     <ClCompile Include="src\SymbolTable.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="lexer.h" />
+    <ClInclude Include="parser.h" />
     <ClInclude Include="src\nodes.h" />
     <ClInclude Include="src\ParseTree.h">
       <SubType>

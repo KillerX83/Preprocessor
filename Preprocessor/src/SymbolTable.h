@@ -1,6 +1,7 @@
 #pragma once
-#define TABSIZE 100
+
 #include <vector>
+
 class SymbolTable
 {
 	vector<Data> table;

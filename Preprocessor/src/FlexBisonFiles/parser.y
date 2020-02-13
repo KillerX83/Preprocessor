@@ -38,7 +38,6 @@
 
 	#include <iostream>
 	#include <cstdio>
-	#include "nodes.h"
 	#include "ParseTree.h"
 		
 	using namespace std;
@@ -64,7 +63,7 @@
 	/* code for initialization before parsing 
 		code in this block is executed each time yyparse is called. */
 
-		// yydebug = 1;
+		yydebug = 1;
 }
 
 	// we are going to use
@@ -75,7 +74,6 @@
 	int intg;
 	char* cstr;
 	double dbl;
-	ASTnode* node;
 	enum class TYPE { INTG=0, DBL} ;
 }
 	// attach TKN_ prefix to the user defined 
@@ -83,70 +81,62 @@
 %define api.token.prefix {TKN_}
 
 %token	DEBUG_ON DEBUG_OFF
-%token '#' '&'  ',' '\n' CleanString for next to
-%token <cstr> identifier
-%token <dbl>  constant
-%token <TYPE> type
+%token '#' '&'  ',' '\n' 
+%token for next to read def string
+%token  identifier
+%token constant
+%token  type
 %right '='
 %left '+' '-'
 %left '*' '/'
-%type<node> statement expression def read 
-%type<node> list variable value CleanString
 
-	// for parser debugging and tracing use
-	//%printer { fprintf(yyoutput, "--- %s", $$); } <cstr>
-
-	// for destructors' to call when parser' stack unwinding
-	// these routines are called only when error recovery by bison
-	//%destructor { std::cout<<$$<<" is deleted"; delete[] $$; $$ = nullptr;  } <cstr>
+	
 
 %start program
 
 %%
 
 program: %empty
-	| program statement { $2->GenCode; cParseTree.TreeFree($2); }
+	| program statement 
 	;
 	
-statement: CleanString { $$ = pParseTree.newclean($1); }
-	| '#' for identifier '=' expression to expression '\n' list '#' next { $$ = pParseTree.newfor($3, $5, $7, $9); }
-	| '#' def '\n' { $$ = $2; }
-	| '#' read '\n' { $$ = $2; }
+statement: '#' for identifier '=' expression to expression '\n' list  '\n'
+	| '#' def DefOp '\n' 
+	| '#' read ReadOp '\n' 
+	| line
+	| '\n'
 	;
 
-def: variable type { $$ = pParseTree.newdef($1, NULL); }
-	| variable type ',' def { $$ = pParseTree.newdef($1, $2); }
+line: string '&' variable line
+	| string '\n'
+	| '&' variable line
+	| '\n'
 	;
 
-read: variable { $$ = pParseTree.newread($1, NULL); }
-	| variable ',' read { $$ = pParseTree.newread($1, $3); }
+DefOp: variable type 
+	| variable type ',' DefOp 
 	;
 
-expression: value	{ $$ = $1 }
-	| variable		{ $$ = $1 }
-	| expression '+' expression { $$ = pParseTree.newnode('+', $1, $3); }
-	| expression '-' expression	{ $$ = pParseTree.newnode('-', $1, $3); }
-	| expression '*' expression	{ $$ = pParseTree.newnode('*', $1, $3); }
-	| expression '/' expression	{ $$ = pParseTree.newnode('/', $1, $3); }
-	| '(' expression ')'		{ $$ = $2; }
-	| variable '=' expression { $$ = pParseTree.newasn('=', $1, $3); }
+ReadOp: variable 
+	| variable ',' ReadOp 
 	;
 
-list: %empty { $$ = NULL; }
-	| statement list { 
-		if ($2 == NULL)
-			$$ = $1;
-			else
-			$$ = pParseTree.newnode('L', $1, $2);
-		}
-	;
-value: constant	{ $$ = pParseTree.newnum($1); }
-	| '&' variable  { $$ = $2; }
+expression: constant	
+	| variable
+	| expression '+' expression 
+	| expression '-' expression	
+	| expression '*' expression	
+	| expression '/' expression	
+	| '(' expression ')'		
 	;
 
-variable: identifier { $$ = pParseTree.newref($1, NULL, NULL); }
-	| identifier '(' expression ')' { $$ = pParseTree.newref($1, $3, NULL); }
-	| identifier '(' expression ',' expression ')' { $$ = pParseTree.newref($1, $3, $5); }
+list: '#' next identifier		// можно ли убрать связь list и for?
+	| statement list 
+	;
+
+variable: identifier 
+	| identifier '(' expression ')'
+	| identifier '(' expression ',' expression ')' 
 	;
 
 

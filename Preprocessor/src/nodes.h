@@ -1,96 +1,149 @@
 #pragma once
-extern enum class TYPE;
+enum class NUMTYPE { INT = 0, REAL };
+enum class NODETYPE { AST = 0, FOR, DEF, READ, VAR, ASN, LINE, STRING, NUM, SUM, SUB, MUL, DIV};
 class ASTnode
 {
 public:
-	ASTnode* m_left;
-	ASTnode* m_rigth;
-	int m_nodetype;
-
-public:
-	ASTnode(int nodetype, ASTnode* left, ASTnode* rigth);
-	void virtual Action();
+	double virtual Action();
 };
 
 class FORnode : public ASTnode
 {
 public:
-	const int m_nodetype = 'F';
+	const NODETYPE m_nodetype = NODETYPE::FOR;
 	char* m_id;
 	ASTnode* m_FirstIndex;
 	ASTnode* m_SecondIndex;
 
 public:
-	FORnode(const char* id, ASTnode* FirstIndex, ASTnode* Secondindex);
-	void Action() override;
+	FORnode(char* id, ASTnode* FirstIndex, ASTnode* Secondindex);
+	double Action() override;
 };
 class DEFnode : public ASTnode
 {
 public:
-	const int m_nodetype = 'D';
+	const NODETYPE m_nodetype = NODETYPE::DEF;
 	ASTnode* m_variable;
-	TYPE m_type;
+	NUMTYPE m_type;
 	ASTnode* m_nextdef;
 
 public:
-	DEFnode(ASTnode* variable, TYPE type, ASTnode* nextdef);
-	void Action() override;
+	DEFnode(ASTnode* variable, NUMTYPE type, ASTnode* nextdef);
+	double Action() override;
 };
 class READnode : public ASTnode
 {
 public:
-	const int m_nodetype = 'R';
+	const NODETYPE m_nodetype = NODETYPE::READ;
 	ASTnode* m_variable;
 	ASTnode* m_nextread;
 
 public:
 	READnode(ASTnode* variable, ASTnode* nextread);
-	void Action() override;
+	double Action() override;
 };
 
-class SYMnode : public ASTnode
+class VARnode : public ASTnode
 {
 public:
-	const int m_nodetype = 'S';
+	const NODETYPE m_nodetype = NODETYPE::VAR;
 	char* m_id;
 	ASTnode* m_FirstIndex;
 	ASTnode* m_SecondIndex;
 
 public:
-	SYMnode(char* id, ASTnode* FirstIndex, ASTnode* SecondIndex);
-	void Action() override;
+	VARnode(char* id, ASTnode* FirstIndex, ASTnode* SecondIndex);
+	double Action() override;
 };
 
 class ASNnode : public ASTnode
 {
 public:
-	const int m_nodetype = 'A';
+	const NODETYPE m_nodetype = NODETYPE::ASN;
 	ASTnode* m_variable;
 	ASTnode* m_value;
 
 public:
 	ASNnode(ASTnode* variable, ASTnode* value);
-	void Action() override;
+	double Action() override;
 };
 
-class CLEANnode : public ASTnode
+class LINEnode : public ASTnode
 {
 public:
-	const int m_nodetype = 'C';
+	const NODETYPE m_nodetype = NODETYPE::LINE;
 	char* m_str;
 
 public:
-	CLEANnode(char* str);
-	void Action() override;
+	LINEnode(char* str);
+	double Action() override;
+};
+
+class STRINGnode : public ASTnode
+{
+public:
+	const NODETYPE m_nodetype = NODETYPE::STRING;
+	char* m_str;
+
+public:
+	STRINGnode(char* str);
+	double Action() override;
 };
 
 class NUMnode : public ASTnode
 {
 public:
-	const int m_nodetype = 'N';
+	const NODETYPE m_nodetype = NODETYPE::NUM;
 	double m_value;
 
 public:
 	NUMnode(double value);
-	void Action() override;
+	double Action() override;
+};
+
+class MATHnode : public ASTnode
+{
+public:
+	double m_left;
+	double m_right;
+};
+
+class SUMnode : public MATHnode
+{
+public:
+	const NODETYPE m_nodetype = NODETYPE::SUM;
+
+public:
+	SUMnode(double left, double right);
+	double Action() override;
+};
+
+class SUBnode : public MATHnode
+{
+public:
+	const NODETYPE m_nodetype = NODETYPE::SUB;
+
+public:
+	SUBnode(double left, double right);
+	double Action() override;
+};
+
+class PRODUCTnode : public MATHnode
+{
+public:
+	const NODETYPE m_nodetype = NODETYPE::SUM;
+
+public:
+	PRODUCTnode(double left, double right);
+	double Action() override;
+};
+
+class DIVnode : public MATHnode
+{
+public:
+	const NODETYPE m_nodetype = NODETYPE::SUM;
+
+public:
+	DIVnode(double left, double right);
+	double Action() override;
 };

@@ -50,7 +50,6 @@ extern int yydebug;
 
 	#include <iostream>
 	#include <cstdio>
-	#include "nodes.h"
 	#include "ParseTree.h"
 		
 	using namespace std;
@@ -59,7 +58,7 @@ extern int yydebug;
 
 
 
-#line 63 "parser.h"
+#line 62 "parser.h"
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -68,13 +67,15 @@ extern int yydebug;
   {
     TKN_DEBUG_ON = 258,
     TKN_DEBUG_OFF = 259,
-    TKN_CleanString = 260,
-    TKN_for = 261,
-    TKN_next = 262,
-    TKN_to = 263,
-    TKN_identifier = 264,
-    TKN_constant = 265,
-    TKN_type = 266
+    TKN_for = 260,
+    TKN_next = 261,
+    TKN_to = 262,
+    TKN_read = 263,
+    TKN_def = 264,
+    TKN_misc = 265,
+    TKN_identifier = 266,
+    TKN_constant = 267,
+    TKN_type = 268
   };
 #endif
 
@@ -82,12 +83,11 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 74 "src\\FlexBisonFiles\\parser.y"
+#line 73 "src\\FlexBisonFiles\\parser.y"
 	
 	int intg;
 	char* cstr;
 	double dbl;
-	ASTnode* node;
 	enum class TYPE { INTG=0, DBL} ;
 
 #line 94 "parser.h"
