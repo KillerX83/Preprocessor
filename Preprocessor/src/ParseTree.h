@@ -15,14 +15,17 @@ public:
 
 	void TreeFree(ASTnode* start);
 
-	ASTnode* newnode(int nodetype, ASTnode* left, ASTnode* right);
-	ASTnode* newsym(char* id, ASTnode* FirstIndex, ASTnode* Secondindex);
-	ASTnode* newnum(double value);
-	ASTnode* newfor(char* id, ASTnode* start, ASTnode* end, ASTnode* body);
-	ASTnode* newread(ASTnode* variable, ASTnode* nextread);
-	ASTnode* newdef(ASTnode* variable, ASTnode* nextdef);
-	ASTnode* newasn(ASTnode* variable, ASTnode*	value);
-	ASTnode* newclean(ASTnode* clean);
+	ASTnode* NewList(ASTnode* statement, ASTnode* nextlist);
+	ASTnode* NewVar(std::string id, ASTnode* FirstIndex, ASTnode* Secondindex);
+	ASTnode* NewNum(double value);
+	ASTnode* NewFor(std::string id, ASTnode* start, ASTnode* end, ASTnode* body);
+	ASTnode* NewRead(ASTnode* variable, ASTnode* nextread);
+	ASTnode* NewDef(ASTnode* variable, NUMTYPE type, ASTnode* nextdef);
+	ASTnode* NewLine(std::string str, ASTnode* variable, ASTnode* nextline);
+	ASTnode* NewSum(ASTnode* left, ASTnode* right);
+	ASTnode* NewSub(ASTnode* left, ASTnode* right);
+	ASTnode* NewProduct(ASTnode* left, ASTnode* right);
+	ASTnode* NewDiv(ASTnode* left, ASTnode* right);
 
 	SymbolTable table;
 };

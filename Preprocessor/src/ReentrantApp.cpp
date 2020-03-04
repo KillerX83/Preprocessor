@@ -6,9 +6,11 @@
 
 #include <iostream>
 
+CParseTree pt;
+
 int main()
 {
-	CParseTree pt;
+	
 
 	pt.RunParser();
 

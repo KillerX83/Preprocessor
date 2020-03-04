@@ -3,15 +3,18 @@
 #include "parser.h"
 #include "lexer.h"
 
+
+
+
 CParseTree::CParseTree()
 {
-}
 
+}
 
 CParseTree::~CParseTree()
 {
-}
 
+}
 
 int CParseTree::RunParser(const std::string& filename)
 {
@@ -49,50 +52,75 @@ int CParseTree::RunParser(const std::string& filename)
 	return rlt;
 }
 
+
 void CParseTree::TreeFree(ASTnode* start)
 {
+
 }
 
-ASTnode* CParseTree::newnode(int nodetype, ASTnode* left, ASTnode* right)
+ASTnode* CParseTree::NewList(ASTnode* statement, ASTnode* nextlist)
 {
-	return new ASTnode(nodetype, left, right);
+	LISTnode* node = new LISTnode(statement, nextlist);
+	return (ASTnode*)node;
 }
 
-ASTnode* CParseTree::newsym(const char* id, ASTnode* FirstIndex, ASTnode* Secondindex)
+ASTnode* CParseTree::NewVar(std::string id, ASTnode* FirstIndex, ASTnode* Secondindex)
 {
-	return new SYMnode(id, FirstIndex, Secondindex);
+	VARnode* node = new VARnode(id, FirstIndex, Secondindex);
+	return (ASTnode*)node
 }
 
-ASTnode* CParseTree::newnum(double value)
+ASTnode* CParseTree::NewNum(double value)
 {
-	return new NUMnode(value);
+	NUMnode* node = new NUMnode(value);
+	return (ASTnode*)node;
 }
 
-ASTnode* CParseTree::newfor(const char* id, ASTnode* start, ASTnode* end, ASTnode* body)
+ASTnode* CParseTree::NewFor(std::string id, ASTnode* start, ASTnode* end, ASTnode* body)
 {
-	return new FORnode(id, start, end, body);
+	FORnode* node = new FORnode(id, start, end, body);
+	return (ASTnode*)node;
 }
 
-ASTnode* CParseTree::newread(ASTnode* variable, ASTnode* nextread)
+ASTnode* CParseTree::NewRead(ASTnode* variable, ASTnode* nextread)
 {
-	return new READnode(variable, nextread);
+	READnode* node = new READnode(variable, nextread);
+	return (ASTnode*)node;
 }
 
-ASTnode* CParseTree::newdef(ASTnode* variable, ASTnode* nextdef)
+ASTnode* CParseTree::NewDef(ASTnode* variable, NUMTYPE type, ASTnode* nextdef)
 {
-	return new DEFnode(variable, nextdef);
+	DEFnode* node = new DEFnode(variable, type, nextread);
+	return (ASTnode*)node;
 }
 
-ASTnode* CParseTree::newasn(ASTnode* variable, ASTnode* value)
+ASTnode* CParseTree::NewLine(std::string str, ASTnode* variable, ASTnode* nextline)
 {
-	return new ASNnode(variable, value);
+	LINEnode* node = new LINEnode(str, variable, nextline);
+	return (ASTnode*)node;
 }
 
-ASTnode* CParseTree::newclean(ASTnode* clean)
+ASTnode* CParseTree::NewSum(ASTnode* left, ASTnode* right)
 {
-	return new CLEANnode(clean);
+	SUMnode* node = new SUMnode(left, right);
+	return (ASTnode*)node;
 }
 
+ASTnode* CParseTree::NewSub(ASTnode* left, ASTnode* right)
+{
+	SUBnode* node = new SUBnode(left, right);
+	return (ASTnode*)node;
+}
 
+ASTnode* CParseTree::NewProduct(ASTnode* left, ASTnode* right)
+{
+	PRODUCTnode* node = new PRODUCTnode(left, right);
+	return (ASTnode*)node;
+}
 
+ASTnode* CParseTree::NewDiv(ASTnode* left, ASTnode* right)
+{
+	DIVnode* node = new DIVnode(left, right);
+	return (ASTnode*)node;
+}
 

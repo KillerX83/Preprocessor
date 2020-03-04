@@ -1,22 +1,25 @@
 #pragma once
 enum class NUMTYPE { INT = 0, REAL };
-enum class NODETYPE { AST = 0, FOR, DEF, READ, VAR, ASN, LINE, STRING, NUM, SUM, SUB, MUL, DIV};
+enum class NODETYPE { AST = 0, FOR, DEF, READ, VAR, ASN, LINE, LIST, STRING, NUM, SUM, SUB, MUL, DIV };
 class ASTnode
 {
 public:
-	double virtual Action();
+	double virtual Action() = 0;
 };
 
 class FORnode : public ASTnode
 {
 public:
 	const NODETYPE m_nodetype = NODETYPE::FOR;
-	char* m_id;
+	std::string m_id;
 	ASTnode* m_FirstIndex;
 	ASTnode* m_SecondIndex;
+	ASTnode* m_body;
 
 public:
-	FORnode(char* id, ASTnode* FirstIndex, ASTnode* Secondindex);
+	FORnode(std::string id, ASTnode* FirstIndex, ASTnode* Secondindex, ASTnode* body) : m_id(id),
+		m_FirstIndex(FirstIndex), m_SecondIndex(Secondindex),
+		m_body(body) { }
 	double Action() override;
 };
 class DEFnode : public ASTnode
@@ -28,7 +31,8 @@ public:
 	ASTnode* m_nextdef;
 
 public:
-	DEFnode(ASTnode* variable, NUMTYPE type, ASTnode* nextdef);
+	DEFnode(ASTnode* variable, NUMTYPE type, ASTnode* nextdef) :
+		m_variable(variable), m_type(type), m_nextdef(nextdef) {}
 	double Action() override;
 };
 class READnode : public ASTnode
@@ -39,7 +43,8 @@ public:
 	ASTnode* m_nextread;
 
 public:
-	READnode(ASTnode* variable, ASTnode* nextread);
+	READnode(ASTnode* variable, ASTnode* nextread) :
+		m_variable(variable), m_nextread(nextread) {}
 	double Action() override;
 };
 
@@ -47,49 +52,40 @@ class VARnode : public ASTnode
 {
 public:
 	const NODETYPE m_nodetype = NODETYPE::VAR;
-	char* m_id;
+	std::string m_id;
 	ASTnode* m_FirstIndex;
 	ASTnode* m_SecondIndex;
 
 public:
-	VARnode(char* id, ASTnode* FirstIndex, ASTnode* SecondIndex);
+	VARnode(std::string id, ASTnode* FirstIndex, ASTnode* SecondIndex) : m_id(id), m_FirstIndex(FirstIndex), m_SecondIndex(SecondIndex) {}
 	double Action() override;
 };
 
-class ASNnode : public ASTnode
-{
-public:
-	const NODETYPE m_nodetype = NODETYPE::ASN;
-	ASTnode* m_variable;
-	ASTnode* m_value;
 
-public:
-	ASNnode(ASTnode* variable, ASTnode* value);
-	double Action() override;
-};
 
 class LINEnode : public ASTnode
 {
 public:
 	const NODETYPE m_nodetype = NODETYPE::LINE;
-	char* m_str;
+	std::string m_str;
+	ASTnode* m_variable;
+	ASTnode* m_nextline;
 
 public:
-	LINEnode(char* str);
+	LINEnode(std::string str, ASTnode* variable, ASTnode* nextline) : m_str(str), m_variable(variable), m_nextline(nextline) {}
 	double Action() override;
 };
 
-class STRINGnode : public ASTnode
+class LISTnode : public ASTnode
 {
 public:
-	const NODETYPE m_nodetype = NODETYPE::STRING;
-	char* m_str;
-
+	const NODETYPE m_nodetype = NODETYPE::LIST;
+	ASTnode* m_statement;
+	ASTnode* m_nextlist;
 public:
-	STRINGnode(char* str);
+	LISTnode(ASTnode* statement, ASTnode* nextlist) : m_statement(statement), m_nextlist(nextlist) {}
 	double Action() override;
 };
-
 class NUMnode : public ASTnode
 {
 public:
@@ -97,15 +93,15 @@ public:
 	double m_value;
 
 public:
-	NUMnode(double value);
+	NUMnode(double value) : m_value(value) {}
 	double Action() override;
 };
 
 class MATHnode : public ASTnode
 {
 public:
-	double m_left;
-	double m_right;
+	ASTnode* m_left;
+	ASTnode* m_right;
 };
 
 class SUMnode : public MATHnode
@@ -114,7 +110,8 @@ public:
 	const NODETYPE m_nodetype = NODETYPE::SUM;
 
 public:
-	SUMnode(double left, double right);
+	SUMnode(ASTnode* left, ASTnode* right) : m_left(left),
+		m_right(right) {}
 	double Action() override;
 };
 
@@ -124,7 +121,8 @@ public:
 	const NODETYPE m_nodetype = NODETYPE::SUB;
 
 public:
-	SUBnode(double left, double right);
+	SUBnode(ASTnode* left ASTnode* right) : m_left(left),
+		m_right(right) {}
 	double Action() override;
 };
 
@@ -134,7 +132,8 @@ public:
 	const NODETYPE m_nodetype = NODETYPE::SUM;
 
 public:
-	PRODUCTnode(double left, double right);
+	PRODUCTnode(ASTnode* left, ASTnode* right) : m_left(left),
+		m_right(right) {}
 	double Action() override;
 };
 
@@ -144,6 +143,6 @@ public:
 	const NODETYPE m_nodetype = NODETYPE::SUM;
 
 public:
-	DIVnode(double left, double right);
+	DIVnode(ASTnode* left, ASTnode* right) : m_left(left), m_right(right) {}
 	double Action() override;
 };

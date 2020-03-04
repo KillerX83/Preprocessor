@@ -38,6 +38,7 @@
 
 	#include <iostream>
 	#include <cstdio>
+	#include <string>
 	#include "ParseTree.h"
 		
 	using namespace std;
@@ -72,7 +73,7 @@
 %union
 {	
 	int intg;
-	char* cstr;
+	std::string cstr;
 	double dbl;
 	enum class TYPE { INTG=0, DBL} ;
 }
@@ -96,47 +97,47 @@
 
 %%
 
-program: %empty
-	| program statement 
+program: %empParseTreey
+	| program statement { $2-> Action(); pParseTree.TreeFree($2); }
 	;
 	
-statement: '#' for identifier '=' expression to expression '\n' list  '\n'
-	| '#' def DefOp '\n' 
-	| '#' read ReadOp '\n' 
-	| line
+statement: '#' for identifier '=' expression to expression '\n' list  '\n'		{ $$ = pParseTree.NewFor($3, $5, $7, $9); }
+	| '#' def DefOp '\n'														{ $$ = $3; }
+	| '#' read ReadOp '\n'														{ $$ = $3; }
+	| line																		{ $$ = $1; }
 	| '\n'
 	;
 
-line: string '&' variable line
-	| string '\n'
-	| '&' variable line
+line: string '&' variable line			{ $$ = pParseTree.NewLine($1, $3, $4); }
+	| string '\n'						{ $$ = pParseTree.NewLine($1, NULL, NULL); }
+	| '&' variable line					{ $$ = pParseTree.NewLine(NULL, $2, $3); }
 	| '\n'
 	;
 
-DefOp: variable type 
-	| variable type ',' DefOp 
+DefOp: variable type			{ $$ = pParseTree.NewDef($1, $2, NULL); }
+	| variable type ',' DefOp	{ $$ = pParseTree.NewDef($1, $2, $4); }
 	;
 
-ReadOp: variable 
-	| variable ',' ReadOp 
+ReadOp: variable				{ $$ = pParseTree.NewRead($1); }
+	| variable ',' ReadOp		{ $$ = pParseTree.NewRead($1, $3); }
 	;
 
-expression: constant	
-	| variable
-	| expression '+' expression 
-	| expression '-' expression	
-	| expression '*' expression	
-	| expression '/' expression	
-	| '(' expression ')'		
+expression: constant				{ $$ = pParseTree.NewNum($1); }
+	| variable						{ $$ = $1; }
+	| expression '+' expression		{ $$ = pParseTree.NewSum($1, $3); }
+	| expression '-' expression		{ $$ = pParseTree.NewSub($1, $3); } 
+	| expression '*' expression		{ $$ = pParseTree.NewProduct($1, $3); } 
+	| expression '/' expression		{ $$ = pParseTree.NewDiv($1, $3); } 
+	| '(' expression ')'			{ $$ = $2; }
 	;
 
-list: '#' next identifier		// можно ли убрать связь list и for?
-	| statement list 
+list: '#' next identifier		 // можно ли убрать связь list и for?
+	| statement list			{ $$ = pParseTree.NewList($1, $2); }
 	;
 
-variable: identifier 
-	| identifier '(' expression ')'
-	| identifier '(' expression ',' expression ')' 
+variable: identifier								{ $$ = pParseTree.NewVar($1, NULL, NULL); }
+	| identifier '(' expression ')'					{ $$ = pParseTree.NewVar($1, $3, NULL); }
+	| identifier '(' expression ',' expression ')' 	{ $$ = pParseTree.NewVar($1, $3, $5); }
 	;
 
 

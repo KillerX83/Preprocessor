@@ -2,34 +2,37 @@
 
 #include <vector>
 
+enum class NUMTYPE { INT = 0, REAL };
+
 class SymbolTable
 {
 	vector<Data> table;
 
-	void add(char* name, int FirstIndex = -1, int SecondIndex = -1);
-	int search(char* name, int FirstIndex = -1, int SecondIndex = -1);
+	void add(std::string name, int FirstIndex = -1, int SecondIndex = -1);
+	int search(std::string name, int FirstIndex = -1, int SecondIndex = -1);
 };
 
 class Data
 {
-	char* m_name;
-	Data(char* name);
+	std::string m_name;
+	NUMTYPE type;
+	Data(std::string name, NUMTYPE type);
 };
 
 class Variable : public Data 
 {
 	double m_value;
-	Variable(char* name);
+	Variable(std::string name, NUMTYPE type);
 };
 
 class Array : public Data 
 {
 	std::vector<double> m_value;
-	Array(char* name, double size);
+	Array(std::string name, NUMTYPE type, double size);
 };
 
 class Matrix : public Data 
 {
 	std::vector<std::vector<double> > m_value;
-	Matrix(char* name, double rows, double cols);
+	Matrix(std::string name, NUMTYPE type, double rows, double cols);
 };
