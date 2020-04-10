@@ -106,7 +106,7 @@ statement: '#' for identifier '=' expression to expression '\n' list  '\n' { $$ 
 	| '#' def DefOp '\n'  { $$ = $3; }
 	| '#' read ReadOp '\n' {$$ = $3; }
 	| line {$$ = $1; }
-	| '\n'
+	| '\n' { $$ = new LINEnode("\n", NULL, NULL); }
 	;
 
 line: string '&' variable line { $$ = new LINEnode($1, $3, $4); }
@@ -135,8 +135,8 @@ expression: constantInt		{ $$ = new NUMnode($1, NUMTYPE::INT); }
 	;
 
 	// можно ли убрать связь list и for?
-list: '#' next identifier				
-	| statement list { $$ = new LISTnode($1, $2); }
+list: statement list { $$ = new LISTnode($1, $2); }
+	|  '#' next identifier { $$ = new LISTnode(NULL, NULL); }
 	;
 
 variable: identifier { $$ = new VARnode($1, NULL, NULL);}

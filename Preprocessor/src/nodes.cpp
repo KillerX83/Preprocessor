@@ -4,12 +4,18 @@
 #include <fstream>
 extern SymbolTable table;
 std::ifstream fin("resources/Data.pgs");
-std::ofstream fout("resources/SandBox.gps");
+std::ofstream fout("resources/Demon.gps");
 
 
 
 double FORnode::Action()
 {
+	for (int i = static_cast<int>(m_StartValue->Action()); i < static_cast<int>(m_EndValue->Action()); i++)
+	{
+		SymbolTable::SetValue(m_Id, i);
+		m_Body->Action();
+	}
+
 	return 0.0;
 }
 
@@ -63,8 +69,10 @@ double LINEnode::Action()
 
 double LISTnode::Action()
 {
-	m_Statement->Action();
-	m_Nextlist->Action();
+	if (m_Statement != nullptr)
+		m_Statement->Action();
+	if (m_Nextlist != nullptr)
+		m_Nextlist->Action();
 	return 0.0;
 }
 
@@ -79,21 +87,21 @@ double NUMnode::Action()
 // MATH
 double SUBnode::Action()
 {
-	return 0.0;
+	return m_Left->Action() - m_Right->Action();
 }
 
 double SUMnode::Action()
 {
-	return 0.0;
+	return m_Left->Action() + m_Right->Action();
 }
 
 double PRODUCTnode::Action()
 {
-	return 0.0;
+	return m_Left->Action() * m_Right->Action();
 }
 
 double DIVnode::Action()
 {
-	return 0.0;
+	return m_Left->Action() / m_Right->Action();
 }
 

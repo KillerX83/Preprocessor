@@ -22,16 +22,16 @@ public:
 class FORnode : public ASTnode
 {
 public:
-	FORnode(const std::string& id, ASTnode* FirstIndex, ASTnode* Secondindex, ASTnode* body)
-		: m_Id(id), m_FirstIndex(FirstIndex), m_SecondIndex(Secondindex), m_Body(body) { }
+	FORnode(const std::string& id, ASTnode* startValue , ASTnode* endValue, ASTnode* body)
+		: m_Id(id), m_StartValue(startValue), m_EndValue(endValue), m_Body(body) { }
 
 	double Action() override;
 
 private:
 	const NODETYPE m_Nodetype = NODETYPE::FOR;
 	std::string m_Id;
-	ASTnode* m_FirstIndex;
-	ASTnode* m_SecondIndex;
+	ASTnode* m_StartValue;
+	ASTnode* m_EndValue;
 	ASTnode* m_Body;
 };
 class DEFnode : public ASTnode

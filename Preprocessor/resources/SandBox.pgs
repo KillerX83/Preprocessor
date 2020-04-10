@@ -1,3 +1,7 @@
 #def  KNOD int, I int, J int
 #read KNOD
-ajdkajdladaldalkd&KNOD
+#for I=1 to KNOD
+     #for J=1 to KNOD
+        INITIAL   MX$DISTR(&I,&J),&PROB(I,J)
+     #next J
+#next I

@@ -13,7 +13,7 @@ CParseTree pt;
 int main()
 {
 
-	pt.RunParser("resources/SandBox.pgs");
+	pt.RunParser("resources/Demon.pgs");
 
 	std::cout << "Type any key"; char c = std::cin.get();
 
