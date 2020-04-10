@@ -1,0 +1,6 @@
+#def  TARR(KNOD) real, TSERV(KNOD) real, STOR(KNOD) int, PROB(KNOD,KNOD) real
+#read TARR
+#read TSERV
+#read STOR
+#read PROB
+ajdkajdladaldalkd&KNOD

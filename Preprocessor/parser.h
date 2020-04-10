@@ -51,14 +51,13 @@ extern int yydebug;
 	#include <iostream>
 	#include <cstdio>
 	#include "ParseTree.h"
-		
-	using namespace std;
+	#include "nodes.h"
 
 	typedef void* yyscan_t;
 
 
 
-#line 62 "parser.h"
+#line 61 "parser.h"
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -72,10 +71,11 @@ extern int yydebug;
     TKN_to = 262,
     TKN_read = 263,
     TKN_def = 264,
-    TKN_misc = 265,
-    TKN_identifier = 266,
-    TKN_constant = 267,
-    TKN_type = 268
+    TKN_identifier = 265,
+    TKN_string = 266,
+    TKN_constantInt = 267,
+    TKN_constantFloat = 268,
+    TKN_type = 269
   };
 #endif
 
@@ -83,14 +83,15 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 73 "src\\FlexBisonFiles\\parser.y"
+#line 72 "src\\FlexBisonFiles\\parser.y"
 	
+	ASTnode* a;
 	int intg;
-	char* cstr;
+	char* str;
 	double dbl;
-	enum class TYPE { INTG=0, DBL} ;
+	NUMTYPE numtype;
 
-#line 94 "parser.h"
+#line 95 "parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -51,14 +51,18 @@
 INTG	[0-9]+
 FLOAT	[0-9]+\.[0-9]+
 ID	[a-zA-Z]+
-STRING [^#\t&\n ][^\n&]*
+STRING [^#\t&\n ][^&\n]*
 %s operator
 %s substitution
 %%
 
 <operator,INITIAL,substitution>[\t ]+
 <INITIAL>"#" { BEGIN(operator); return '#'; }
-<INITIAL>{STRING} { printf("%s ", yytext); return TKN_string; }
+<INITIAL>{STRING} { std::cout << yytext << std::endl; 
+size_t size = strlen(yytext) + 1;
+	yylval->str = new char[size];
+	strcpy_s(yylval->str, size, yytext);
+return TKN_string; }
 <operator,INITIAL>"\n" { BEGIN(INITIAL); printf("\n\nLINE %d\n\n", yylineno); return '\n'; }
 "&" { BEGIN(substitution); return '&';}
 
@@ -89,14 +93,13 @@ STRING [^#\t&\n ][^\n&]*
 <operator>"for" { return TKN_for; }
 <operator>"to" { return TKN_to; }
 <operator>"next" { return TKN_next; }
-<operator>"int" {return TKN_type; }
-<operator>"real" {return TKN_type; }
+<operator>"int" { yylval->numtype = NUMTYPE::INT; return TKN_type; }
+<operator>"real" { yylval->numtype = NUMTYPE::REAL; return TKN_type; }
 
 
-
-<operator>{ID} { return TKN_identifier; }
-<operator,substitution>{INTG}	{ return TKN_constant; }
-<operator,substitution>{FLOAT} { return TKN_constant; }
+<operator>{ID} { yylval->str = yytext; return TKN_identifier; }
+<operator,substitution>{INTG}	{ yylval->intg = atoi(yytext); return TKN_constantInt; }
+<operator,substitution>{FLOAT} { yylval->dbl = atof(yytext); return TKN_constantFloat; }
 
 
 

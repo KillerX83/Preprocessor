@@ -1,64 +1,98 @@
 #pragma once
-enum class NUMTYPE { INT = 0, REAL };
+
+#include <string>
+
+//#ifndef COPY_CSTR
+//#define COPY_CSTR
+//void copy_cstr(char** pTarget, char* pSource)
+//{
+//	size_t size = strlen(pSource) + 1;
+//	*pTarget = new char[size];
+//	strcpy_s(*pTarget, size, pSource);
+//}
+//#endif
+
+#ifndef NUMtype
+#define NUMtype
+enum class NUMTYPE { NONE = 0, INT, REAL };
+#endif
+
 enum class NODETYPE { AST = 0, FOR, DEF, READ, VAR, ASN, LINE, LIST, STRING, NUM, SUM, SUB, MUL, DIV };
+
+
 class ASTnode
 {
 public:
-	double virtual Action() = 0;
+	virtual ~ASTnode() = default;
+
+	double virtual Action() { return 0.0; }
 };
 
 class FORnode : public ASTnode
 {
 public:
-	const NODETYPE m_nodetype = NODETYPE::FOR;
-	std::string m_id;
+	FORnode(const std::string& id, ASTnode* FirstIndex, ASTnode* Secondindex, ASTnode* body)
+		: m_Id(id), m_FirstIndex(FirstIndex), m_SecondIndex(Secondindex), m_Body(body) { }
+
+	double Action() override;
+
+private:
+	const NODETYPE m_Nodetype = NODETYPE::FOR;
+	std::string m_Id;
 	ASTnode* m_FirstIndex;
 	ASTnode* m_SecondIndex;
-	ASTnode* m_body;
-
-public:
-	FORnode(std::string id, ASTnode* FirstIndex, ASTnode* Secondindex, ASTnode* body) : m_id(id),
-		m_FirstIndex(FirstIndex), m_SecondIndex(Secondindex),
-		m_body(body) { }
-	double Action() override;
+	ASTnode* m_Body;
 };
 class DEFnode : public ASTnode
 {
 public:
-	const NODETYPE m_nodetype = NODETYPE::DEF;
-	ASTnode* m_variable;
-	NUMTYPE m_type;
-	ASTnode* m_nextdef;
-
-public:
 	DEFnode(ASTnode* variable, NUMTYPE type, ASTnode* nextdef) :
-		m_variable(variable), m_type(type), m_nextdef(nextdef) {}
+		m_Variable(variable), m_Type(type), m_Nextdef(nextdef) {}
+
 	double Action() override;
+
+private:
+	const NODETYPE m_Nodetype = NODETYPE::DEF;
+	ASTnode* m_Variable;
+	NUMTYPE m_Type;
+	ASTnode* m_Nextdef;
 };
 class READnode : public ASTnode
 {
 public:
-	const NODETYPE m_nodetype = NODETYPE::READ;
-	ASTnode* m_variable;
-	ASTnode* m_nextread;
-
-public:
 	READnode(ASTnode* variable, ASTnode* nextread) :
-		m_variable(variable), m_nextread(nextread) {}
+		m_Variable(variable), m_Nextread(nextread) {}
+
 	double Action() override;
+	
+
+private:
+	const NODETYPE m_Nodetype = NODETYPE::READ;
+	ASTnode* m_Variable;
+	ASTnode* m_Nextread;
 };
 
 class VARnode : public ASTnode
 {
 public:
-	const NODETYPE m_nodetype = NODETYPE::VAR;
-	std::string m_id;
+	VARnode(const std::string& id, ASTnode* FirstIndex, ASTnode* SecondIndex) 
+		: m_Id(id), m_FirstIndex(FirstIndex), m_SecondIndex(SecondIndex) {}
+
+	inline NUMTYPE GetType() { return m_Type; }
+	inline void SetType(NUMTYPE type) { m_Type = type; }
+	inline void SetValue(double value);
+	inline const std::string& GetID() { return m_Id; }
+	inline double GetFirstIndex() { if (m_FirstIndex == nullptr) return -1; return m_FirstIndex->Action(); }
+	inline double GetSecondIndex() { if (m_SecondIndex == nullptr) return -1; return m_SecondIndex->Action(); }
+
+	double Action() override;
+	
+private:
+	const NODETYPE m_Nodetype = NODETYPE::VAR;
+	NUMTYPE m_Type = NUMTYPE::NONE;
+	std::string m_Id;
 	ASTnode* m_FirstIndex;
 	ASTnode* m_SecondIndex;
-
-public:
-	VARnode(std::string id, ASTnode* FirstIndex, ASTnode* SecondIndex) : m_id(id), m_FirstIndex(FirstIndex), m_SecondIndex(SecondIndex) {}
-	double Action() override;
 };
 
 
@@ -66,83 +100,100 @@ public:
 class LINEnode : public ASTnode
 {
 public:
-	const NODETYPE m_nodetype = NODETYPE::LINE;
-	std::string m_str;
-	ASTnode* m_variable;
-	ASTnode* m_nextline;
+	LINEnode(const std::string& str, ASTnode* variable, ASTnode* nextline);
 
-public:
-	LINEnode(std::string str, ASTnode* variable, ASTnode* nextline) : m_str(str), m_variable(variable), m_nextline(nextline) {}
 	double Action() override;
+
+private:
+	const NODETYPE m_Nodetype = NODETYPE::LINE;
+	std::string m_Str;
+	ASTnode* m_Variable;
+	ASTnode* m_Nextline;
 };
 
 class LISTnode : public ASTnode
 {
 public:
-	const NODETYPE m_nodetype = NODETYPE::LIST;
-	ASTnode* m_statement;
-	ASTnode* m_nextlist;
-public:
-	LISTnode(ASTnode* statement, ASTnode* nextlist) : m_statement(statement), m_nextlist(nextlist) {}
+	LISTnode(ASTnode* statement, ASTnode* nextlist) 
+		: m_Statement(statement), m_Nextlist(nextlist) {}
+
 	double Action() override;
+
+private:
+	const NODETYPE m_Nodetype = NODETYPE::LIST;
+	ASTnode* m_Statement;
+	ASTnode* m_Nextlist;
 };
 class NUMnode : public ASTnode
 {
 public:
-	const NODETYPE m_nodetype = NODETYPE::NUM;
-	double m_value;
+	NUMnode(double value, NUMTYPE type) : 
+		m_Value(value), m_Type(type) {
+		if (m_Type == NUMTYPE::INT) m_Value = static_cast<int>(m_Value); }
 
-public:
-	NUMnode(double value) : m_value(value) {}
 	double Action() override;
+	
+private:
+	const NODETYPE m_Nodetype = NODETYPE::NUM;
+	double m_Value;
+	NUMTYPE m_Type;
 };
 
-class MATHnode : public ASTnode
-{
-public:
-	ASTnode* m_left;
-	ASTnode* m_right;
-};
 
-class SUMnode : public MATHnode
+class SUMnode : public ASTnode
 {
 public:
+	SUMnode(ASTnode* left, ASTnode* right)
+		: m_Left(left), m_Right(right) {}
+
+	double Action() override;
+
+private:
 	const NODETYPE m_nodetype = NODETYPE::SUM;
+	ASTnode* m_Left;
+	ASTnode* m_Right;
 
-public:
-	SUMnode(ASTnode* left, ASTnode* right) : m_left(left),
-		m_right(right) {}
-	double Action() override;
 };
 
-class SUBnode : public MATHnode
+class SUBnode : public ASTnode
 {
 public:
+	SUBnode(ASTnode* left, ASTnode* right) 
+		: m_Left(left), m_Right(right) {}
+	double Action() override;
+
+private:
 	const NODETYPE m_nodetype = NODETYPE::SUB;
+	ASTnode* m_Left;
+	ASTnode* m_Right;
 
-public:
-	SUBnode(ASTnode* left ASTnode* right) : m_left(left),
-		m_right(right) {}
-	double Action() override;
 };
 
-class PRODUCTnode : public MATHnode
+class PRODUCTnode : public ASTnode
 {
 public:
-	const NODETYPE m_nodetype = NODETYPE::SUM;
+	PRODUCTnode(ASTnode* left, ASTnode* right) 
+		: m_Left(left), m_Right(right) {}
 
-public:
-	PRODUCTnode(ASTnode* left, ASTnode* right) : m_left(left),
-		m_right(right) {}
 	double Action() override;
+
+private:
+	const NODETYPE m_nodetype = NODETYPE::SUM;
+	ASTnode* m_Left;
+	ASTnode* m_Right;
+
 };
 
-class DIVnode : public MATHnode
+class DIVnode : public ASTnode
 {
 public:
-	const NODETYPE m_nodetype = NODETYPE::SUM;
+	DIVnode(ASTnode* left, ASTnode* right) 
+		: m_Left(left), m_Right(right) {}
 
-public:
-	DIVnode(ASTnode* left, ASTnode* right) : m_left(left), m_right(right) {}
 	double Action() override;
+
+private:
+	const NODETYPE m_nodetype = NODETYPE::SUM;
+	ASTnode* m_Left;
+	ASTnode* m_Right;
 };

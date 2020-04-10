@@ -3,16 +3,17 @@
 
 
 #include "ParseTree.h"
+#include "SymbolTable.h"
 
 #include <iostream>
 
 CParseTree pt;
 
+
 int main()
 {
-	
 
-	pt.RunParser();
+	pt.RunParser("resources/SandBox.pgs");
 
 	std::cout << "Type any key"; char c = std::cin.get();
 

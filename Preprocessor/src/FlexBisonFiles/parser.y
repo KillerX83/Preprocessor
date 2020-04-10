@@ -38,10 +38,8 @@
 
 	#include <iostream>
 	#include <cstdio>
-	#include <string>
 	#include "ParseTree.h"
-		
-	using namespace std;
+	#include "nodes.h"
 
 	typedef void* yyscan_t;
 
@@ -72,10 +70,11 @@
 	// %define api.value.type union
 %union
 {	
+	ASTnode* a;
 	int intg;
-	std::string cstr;
+	char* str;
 	double dbl;
-	enum class TYPE { INTG=0, DBL} ;
+	NUMTYPE numtype;
 }
 	// attach TKN_ prefix to the user defined 
 	// token type
@@ -83,61 +82,66 @@
 
 %token	DEBUG_ON DEBUG_OFF
 %token '#' '&'  ',' '\n' 
-%token for next to read def string
-%token  identifier
-%token constant
-%token  type
+%token for next to read def
+%token <str> identifier string
+%token <intg> constantInt
+%token <dbl> constantFloat
+%token  <numtype> type;
 %right '='
 %left '+' '-'
 %left '*' '/'
-
+%type <a> statement line DefOp
+%type <a> ReadOp expression list variable
 	
 
 %start program
 
 %%
-
-program: %empParseTreey
-	| program statement { $2-> Action(); pParseTree.TreeFree($2); }
+		//TODO: TreeFree
+program: %empty
+	| program statement { $2->Action(); }
 	;
 	
-statement: '#' for identifier '=' expression to expression '\n' list  '\n'		{ $$ = pParseTree.NewFor($3, $5, $7, $9); }
-	| '#' def DefOp '\n'														{ $$ = $3; }
-	| '#' read ReadOp '\n'														{ $$ = $3; }
-	| line																		{ $$ = $1; }
+statement: '#' for identifier '=' expression to expression '\n' list  '\n' { $$ = new FORnode($3, $5, $7, $9); }
+	| '#' def DefOp '\n'  { $$ = $3; }
+	| '#' read ReadOp '\n' {$$ = $3; }
+	| line {$$ = $1; }
 	| '\n'
 	;
 
-line: string '&' variable line			{ $$ = pParseTree.NewLine($1, $3, $4); }
-	| string '\n'						{ $$ = pParseTree.NewLine($1, NULL, NULL); }
-	| '&' variable line					{ $$ = pParseTree.NewLine(NULL, $2, $3); }
-	| '\n'
+line: string '&' variable line { $$ = new LINEnode($1, $3, $4); }
+	| string '&' variable		{ $$ = new LINEnode($1, $3, NULL); }
+	| string '\n'				{ $$ = new LINEnode($1, NULL, NULL); }
+	| '&' variable line			{ $$ = new LINEnode("", $2, $3); }
+	| '&' variable				{ $$ = new LINEnode("", $2, NULL); }
 	;
 
-DefOp: variable type			{ $$ = pParseTree.NewDef($1, $2, NULL); }
-	| variable type ',' DefOp	{ $$ = pParseTree.NewDef($1, $2, $4); }
+DefOp: variable type		{ $$ = new DEFnode($1, $2, NULL); }
+	| variable type ',' DefOp  { $$ = new DEFnode($1, $2, $4); }
 	;
 
-ReadOp: variable				{ $$ = pParseTree.NewRead($1); }
-	| variable ',' ReadOp		{ $$ = pParseTree.NewRead($1, $3); }
+ReadOp: variable			{ $$ = new READnode($1, NULL); }
+	| variable ',' ReadOp   { $$ = new READnode($1, $3); }
 	;
 
-expression: constant				{ $$ = pParseTree.NewNum($1); }
-	| variable						{ $$ = $1; }
-	| expression '+' expression		{ $$ = pParseTree.NewSum($1, $3); }
-	| expression '-' expression		{ $$ = pParseTree.NewSub($1, $3); } 
-	| expression '*' expression		{ $$ = pParseTree.NewProduct($1, $3); } 
-	| expression '/' expression		{ $$ = pParseTree.NewDiv($1, $3); } 
-	| '(' expression ')'			{ $$ = $2; }
+expression: constantInt		{ $$ = new NUMnode($1, NUMTYPE::INT); }
+	| constantFloat			{ $$ = new NUMnode($1, NUMTYPE::REAL); }
+	| variable				{$$ = $1; }
+	| expression '+' expression  { $$ = new SUMnode($1, $3);}
+	| expression '-' expression	 { $$ = new SUBnode($1, $3); }
+	| expression '*' expression	 { $$ = new PRODUCTnode($1, $3); }
+	| expression '/' expression	 { $$ = new DIVnode($1, $3); }
+	| '(' expression ')'		 { $$ = $2; }
 	;
 
-list: '#' next identifier		 // можно ли убрать связь list и for?
-	| statement list			{ $$ = pParseTree.NewList($1, $2); }
+	// можно ли убрать связь list и for?
+list: '#' next identifier				
+	| statement list { $$ = new LISTnode($1, $2); }
 	;
 
-variable: identifier								{ $$ = pParseTree.NewVar($1, NULL, NULL); }
-	| identifier '(' expression ')'					{ $$ = pParseTree.NewVar($1, $3, NULL); }
-	| identifier '(' expression ',' expression ')' 	{ $$ = pParseTree.NewVar($1, $3, $5); }
+variable: identifier { $$ = new VARnode($1, NULL, NULL);}
+	| identifier '(' expression ')' { $$ = new VARnode($1, $3, NULL);}
+	| identifier '(' expression ',' expression ')' { $$ = new VARnode($1, $3, $5);}
 	;
 
 

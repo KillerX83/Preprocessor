@@ -921,27 +921,31 @@ YY_RULE_SETUP
 case 3:
 YY_RULE_SETUP
 #line 62 "src\\FlexBisonFiles\\lexer.l"
-{ printf("%s ", yytext); return TKN_misc; }
+{ std::cout << yytext << std::endl; 
+size_t size = strlen(yytext) + 1;
+	yylval->str = new char[size];
+	strcpy_s(yylval->str, size, yytext);
+return TKN_string; }
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 63 "src\\FlexBisonFiles\\lexer.l"
+#line 67 "src\\FlexBisonFiles\\lexer.l"
 { BEGIN(INITIAL); printf("\n\nLINE %d\n\n", yylineno); return '\n'; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 64 "src\\FlexBisonFiles\\lexer.l"
+#line 68 "src\\FlexBisonFiles\\lexer.l"
 { BEGIN(substitution); return '&';}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 67 "src\\FlexBisonFiles\\lexer.l"
+#line 71 "src\\FlexBisonFiles\\lexer.l"
 { braces++; return '('; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 69 "src\\FlexBisonFiles\\lexer.l"
+#line 73 "src\\FlexBisonFiles\\lexer.l"
 { 
 	if (braces == 0) BEGIN(INITIAL);
 	return TKN_identifier; 
@@ -952,94 +956,94 @@ case 8:
 yyg->yy_c_buf_p = yy_cp -= 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 73 "src\\FlexBisonFiles\\lexer.l"
+#line 77 "src\\FlexBisonFiles\\lexer.l"
 { 
 	return TKN_identifier; 
 }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 76 "src\\FlexBisonFiles\\lexer.l"
+#line 80 "src\\FlexBisonFiles\\lexer.l"
 { braces--; if (braces == 0) BEGIN(INITIAL); return ')'; }
 	YY_BREAK
 case 10:
-#line 79 "src\\FlexBisonFiles\\lexer.l"
-case 11:
-#line 80 "src\\FlexBisonFiles\\lexer.l"
-case 12:
-#line 81 "src\\FlexBisonFiles\\lexer.l"
-case 13:
-#line 82 "src\\FlexBisonFiles\\lexer.l"
-case 14:
 #line 83 "src\\FlexBisonFiles\\lexer.l"
+case 11:
+#line 84 "src\\FlexBisonFiles\\lexer.l"
+case 12:
+#line 85 "src\\FlexBisonFiles\\lexer.l"
+case 13:
+#line 86 "src\\FlexBisonFiles\\lexer.l"
+case 14:
+#line 87 "src\\FlexBisonFiles\\lexer.l"
 case 15:
 YY_RULE_SETUP
-#line 83 "src\\FlexBisonFiles\\lexer.l"
+#line 87 "src\\FlexBisonFiles\\lexer.l"
 { return yytext[0];}
 	YY_BREAK
 case 16:
-#line 86 "src\\FlexBisonFiles\\lexer.l"
+#line 90 "src\\FlexBisonFiles\\lexer.l"
 case 17:
 YY_RULE_SETUP
-#line 86 "src\\FlexBisonFiles\\lexer.l"
+#line 90 "src\\FlexBisonFiles\\lexer.l"
 { return yytext[0]; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 88 "src\\FlexBisonFiles\\lexer.l"
+#line 92 "src\\FlexBisonFiles\\lexer.l"
 { return TKN_def; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 89 "src\\FlexBisonFiles\\lexer.l"
+#line 93 "src\\FlexBisonFiles\\lexer.l"
 { return TKN_read; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 90 "src\\FlexBisonFiles\\lexer.l"
+#line 94 "src\\FlexBisonFiles\\lexer.l"
 { return TKN_for; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 91 "src\\FlexBisonFiles\\lexer.l"
+#line 95 "src\\FlexBisonFiles\\lexer.l"
 { return TKN_to; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 92 "src\\FlexBisonFiles\\lexer.l"
+#line 96 "src\\FlexBisonFiles\\lexer.l"
 { return TKN_next; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 93 "src\\FlexBisonFiles\\lexer.l"
-{return TKN_type; }
+#line 97 "src\\FlexBisonFiles\\lexer.l"
+{ yylval->numtype = NUMTYPE::INT; return TKN_type; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 94 "src\\FlexBisonFiles\\lexer.l"
-{return TKN_type; }
+#line 98 "src\\FlexBisonFiles\\lexer.l"
+{ yylval->numtype = NUMTYPE::REAL; return TKN_type; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 98 "src\\FlexBisonFiles\\lexer.l"
-{ return TKN_identifier; }
+#line 101 "src\\FlexBisonFiles\\lexer.l"
+{ yylval->str = yytext; return TKN_identifier; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 99 "src\\FlexBisonFiles\\lexer.l"
-{ return TKN_constant; }
+#line 102 "src\\FlexBisonFiles\\lexer.l"
+{ yylval->intg = atoi(yytext); return TKN_constantInt; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 100 "src\\FlexBisonFiles\\lexer.l"
-{ return TKN_constant; }
+#line 103 "src\\FlexBisonFiles\\lexer.l"
+{ yylval->dbl = atof(yytext); return TKN_constantFloat; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 105 "src\\FlexBisonFiles\\lexer.l"
+#line 108 "src\\FlexBisonFiles\\lexer.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1042 "lexer.cpp"
+#line 1046 "lexer.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(operator):
 case YY_STATE_EOF(substitution):
@@ -2286,6 +2290,6 @@ void yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 105 "src\\FlexBisonFiles\\lexer.l"
+#line 108 "src\\FlexBisonFiles\\lexer.l"
 
 
