@@ -71,9 +71,15 @@ return TKN_string; }
 
 <substitution>{ID} { 
 	if (braces == 0) BEGIN(INITIAL);
+	size_t size = strlen(yytext) + 1;
+	yylval->str = new char[size];
+	strcpy_s(yylval->str, size, yytext);
 	return TKN_identifier; 
 }
 <substitution>{ID}/"(" { 
+	size_t size = strlen(yytext) + 1;
+	yylval->str = new char[size];
+	strcpy_s(yylval->str, size, yytext);
 	return TKN_identifier; 
 }
 <substitution>")" { braces--; if (braces == 0) BEGIN(INITIAL); return ')'; }
@@ -97,7 +103,9 @@ return TKN_string; }
 <operator>"real" { yylval->numtype = NUMTYPE::REAL; return TKN_type; }
 
 
-<operator>{ID} { yylval->str = yytext; return TKN_identifier; }
+<operator>{ID} { size_t size = strlen(yytext) + 1;
+	yylval->str = new char[size];
+	strcpy_s(yylval->str, size, yytext); return TKN_identifier; }
 <operator,substitution>{INTG}	{ yylval->intg = atoi(yytext); return TKN_constantInt; }
 <operator,substitution>{FLOAT} { yylval->dbl = atof(yytext); return TKN_constantFloat; }
 

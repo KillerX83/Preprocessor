@@ -2,15 +2,6 @@
 
 #include <string>
 
-//#ifndef COPY_CSTR
-//#define COPY_CSTR
-//void copy_cstr(char** pTarget, char* pSource)
-//{
-//	size_t size = strlen(pSource) + 1;
-//	*pTarget = new char[size];
-//	strcpy_s(*pTarget, size, pSource);
-//}
-//#endif
 
 #ifndef NUMtype
 #define NUMtype
