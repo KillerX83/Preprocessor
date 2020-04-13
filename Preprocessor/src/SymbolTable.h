@@ -51,7 +51,6 @@ public:
 
 private:
 	std::vector<double> m_Value;
-
 };
 
 class Matrix : public Data 
@@ -83,6 +82,6 @@ public:
 	static int GetValue(const std::string& name, int firstIndex = -1, int secondIndex = -1);
 
 private:
-	static std::vector<Data*> m_Table;
+	static std::vector<Data*> s_Table;
 
 };

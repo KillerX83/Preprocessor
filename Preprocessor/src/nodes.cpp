@@ -4,7 +4,7 @@
 #include <fstream>
 extern SymbolTable table;
 std::ifstream fin("resources/Data.pgs");
-std::ofstream fout("resources/Demon.gps");
+std::ofstream fout("resources/SandBox.gps");
 
 
 
