@@ -3,7 +3,6 @@
 #include "ParseTree.h"
 #include <fstream>
 extern SymbolTable table;
-std::ifstream fin("resources/Data.pgs");
 std::ofstream fout("resources/SandBox.gps");
 
 
@@ -42,9 +41,7 @@ void VARnode::SetValue(double value)
 
 double READnode::Action()
 {
-	double value;
-	fin >> value;
-	static_cast<VARnode*>(m_Variable)->SetValue(value);
+	SymbolTable::Read(static_cast<VARnode*>(m_Variable)->GetID());
 	return 0.0;
 }
 

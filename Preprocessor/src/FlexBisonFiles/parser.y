@@ -62,7 +62,7 @@
 	/* code for initialization before parsing 
 		code in this block is executed each time yyparse is called. */
 
-		yydebug = 1;
+		yydebug = 0;
 }
 
 	// we are going to use
@@ -111,9 +111,9 @@ statement: '#' for identifier '=' expression to expression '\n' list  '\n' { $$ 
 
 line: string '&' variable line { $$ = new LINEnode($1, $3, $4); }
 	| string '&' variable		{ $$ = new LINEnode($1, $3, NULL); }
-	| string '\n'				{ $$ = new LINEnode($1, NULL, NULL); }
+	| string					{ $$ = new LINEnode($1, NULL, NULL); }
 	| '&' variable line			{ $$ = new LINEnode("", $2, $3); }
-	| '&' variable				{ $$ = new LINEnode("", $2, NULL); }
+	| '&' variable			{ $$ = new LINEnode("", $2, NULL); }
 	;
 
 DefOp: variable type		{ $$ = new DEFnode($1, $2, NULL); }
