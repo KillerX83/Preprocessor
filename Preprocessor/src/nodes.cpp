@@ -111,7 +111,7 @@ double LINEnode::Action()
 {
 	fout << m_Str;
 	if (m_Variable != nullptr)
-		fout << m_Variable->Action() << " ";
+		fout << m_Variable->Action();
 	if (m_Nextline != nullptr)
 		m_Nextline->Action();
 	return 0.0;

@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 {
 	SymbolTable::Add("LENGTH", NUMTYPE::INT);
 	SymbolTable::Add("RANDINIT", NUMTYPE::INT);
-	SymbolTable::SetValue("LENGTH", atoi(argv[4])); // 1000 argv[4]
+	SymbolTable::SetValue("LENGTH",atoi(argv[4])); // 1000 argv[4]
 	SymbolTable::SetValue("RANDINIT", atoi(argv[5])); // 11 argv[5]
 	SymbolTable::SetInputFile(argv[2]);	//argv[2]
 	fout.open(argv[3]);			//argv[3]

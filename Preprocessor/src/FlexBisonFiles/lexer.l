@@ -47,7 +47,7 @@
 	#include "parser.h"
 	static int braces = 0;
 }
-
+WS		[\t ]
 INTG	[0-9]+
 FLOAT	[0-9]+\.[0-9]+
 ID	[a-zA-Z]+
@@ -55,8 +55,12 @@ STRING [^#\t&\n ][^&\n]*
 %s operator
 %s substitution
 %%
+<substitution>{WS}+ { BEGIN(INITIAL); size_t size = strlen(yytext) + 1;
+	yylval->str = new char[size];
+	strcpy_s(yylval->str, size, yytext);
+return TKN_string; }
 
-<operator,INITIAL,substitution>[\t ]+
+<operator,INITIAL>[\t ]+
 <INITIAL>"#" { BEGIN(operator); return '#'; }
 <INITIAL>{STRING} { std::cout << yytext << std::endl; 
 size_t size = strlen(yytext) + 1;
@@ -69,6 +73,14 @@ return TKN_string; }
 
 <substitution>"(" { braces++; return '('; }
 
+
+
+<substitution>{ID}/{WS} {
+	size_t size = strlen(yytext) + 1;
+	yylval->str = new char[size];
+	strcpy_s(yylval->str, size, yytext);
+	return TKN_identifier; 
+}
 <substitution>{ID} { 
 	if (braces == 0) BEGIN(INITIAL);
 	size_t size = strlen(yytext) + 1;
