@@ -100,7 +100,7 @@
 %%
 		//TODO: TreeFree
 program: %empty
-	| program statement { $2->Action(); $2->Free(); delete $2; SymbolTable::Free(); }
+	| program statement { $2->Action(); $2->Free(); delete $2; }
 	;
 	
 statement: '#' for identifier '=' expression to expression '\n' list  '\n' { $$ = new FORnode($3, $5, $7, $9); }

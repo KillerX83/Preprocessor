@@ -127,6 +127,7 @@ void SymbolTable::SetInputFile(const std::string& name)
 	s_Input.open(name);
 }
 
+// TODO: correct this
 void SymbolTable::Free()
 {
 	for (int i = 0; i < s_Table.size(); i++)

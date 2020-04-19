@@ -1418,7 +1418,7 @@ yyreduce:
     {
   case 3:
 #line 103 "src\\FlexBisonFiles\\parser.y"
-    { (yyvsp[0].a)->Action(); (yyvsp[0].a)->Free(); delete (yyvsp[0].a); SymbolTable::Free(); }
+    { (yyvsp[0].a)->Action(); (yyvsp[0].a)->Free(); delete (yyvsp[0].a); }
 #line 1423 "parser.cpp"
     break;
 
