@@ -1,8 +1,8 @@
 #include "SymbolTable.h"
 #include <fstream>
 
-std::vector<Data*> SymbolTable::s_Table = std::vector<Data*>();
-std::ifstream SymbolTable::s_Input = std::ifstream("resources/Data.pgs");
+std::vector<Data*> SymbolTable::s_Table;
+std::ifstream SymbolTable::s_Input;
 
 void SymbolTable::Add(const std::string& name, NUMTYPE type, int firstIndex /*= -1*/, int secondIndex /*= -1*/)
 {
@@ -53,7 +53,7 @@ void SymbolTable::SetValue(const std::string& name, double value, int firstIndex
 	}
 }
 
-int SymbolTable::GetValue(const std::string& name, int firstIndex /*= -1*/, int secondIndex /*= -1*/)
+double SymbolTable::GetValue(const std::string& name, int firstIndex /*= -1*/, int secondIndex /*= -1*/)
 {
 	for (int i = 0; i < s_Table.size(); i++)
 	{
@@ -65,11 +65,11 @@ int SymbolTable::GetValue(const std::string& name, int firstIndex /*= -1*/, int 
 			}
 			else if (firstIndex != -1 && secondIndex == -1)
 			{
-				return static_cast<Array*>(s_Table[i])->GetValue(firstIndex);
+				return static_cast<Array*>(s_Table[i])->GetValue(firstIndex - 1);
 			}
 			else if (firstIndex != -1 && secondIndex != -1)
 			{
-				return static_cast<Matrix*>(s_Table[i])->GetValue(firstIndex, secondIndex);
+				return static_cast<Matrix*>(s_Table[i])->GetValue(firstIndex - 1, secondIndex - 1);
 			}
 			else
 			{
@@ -116,8 +116,13 @@ void SymbolTable::Read(const std::string& name)
 			}
 			else
 			{
-
+				std::cout << "SymbolTable::Read(Impossible)" << std::endl;
 			}
 		}
 	}
+}
+
+void SymbolTable::SetInputFile(const std::string& name)
+{
+	s_Input.open(name);
 }

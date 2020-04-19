@@ -3,13 +3,13 @@
 #include "ParseTree.h"
 #include <fstream>
 extern SymbolTable table;
-std::ofstream fout("resources/SandBox.gps");
+std::ofstream fout;
 
 
 
 double FORnode::Action()
 {
-	for (int i = static_cast<int>(m_StartValue->Action()); i < static_cast<int>(m_EndValue->Action()); i++)
+	for (int i = static_cast<int>(m_StartValue->Action()); i <= static_cast<int>(m_EndValue->Action()); i++)
 	{
 		SymbolTable::SetValue(m_Id, i);
 		m_Body->Action();
@@ -101,4 +101,5 @@ double DIVnode::Action()
 {
 	return m_Left->Action() / m_Right->Action();
 }
+
 

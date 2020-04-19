@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <fstream>
+
 
 
 #ifndef NUMtype
@@ -17,6 +19,7 @@ public:
 	virtual ~ASTnode() = default;
 
 	double virtual Action() { return 0.0; }
+	
 };
 
 class FORnode : public ASTnode

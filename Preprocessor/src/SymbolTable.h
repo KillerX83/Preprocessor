@@ -85,8 +85,9 @@ class SymbolTable
 public:
 	static void Add(const std::string& name, NUMTYPE type, int firstIndex = -1, int secondIndex = -1);
 	static void SetValue(const std::string& name, double value, int firstIndex = -1, int secondIndex = -1);
-	static int GetValue(const std::string& name, int firstIndex = -1, int secondIndex = -1);
+	static double GetValue(const std::string& name, int firstIndex = -1, int secondIndex = -1);
 	static void Read(const std::string& name);
+	static void SetInputFile(const std::string& name);
 
 private:
 	static std::vector<Data*> s_Table;
