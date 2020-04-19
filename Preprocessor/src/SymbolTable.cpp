@@ -126,3 +126,16 @@ void SymbolTable::SetInputFile(const std::string& name)
 {
 	s_Input.open(name);
 }
+
+void SymbolTable::Free()
+{
+	for (int i = 0; i < s_Table.size(); i++)
+	{
+		if (s_Table[i] != nullptr)
+		{
+			delete s_Table[i];
+		}
+	}
+	s_Table.clear();
+}
+

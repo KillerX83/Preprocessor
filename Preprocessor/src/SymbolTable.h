@@ -88,6 +88,7 @@ public:
 	static double GetValue(const std::string& name, int firstIndex = -1, int secondIndex = -1);
 	static void Read(const std::string& name);
 	static void SetInputFile(const std::string& name);
+	static void Free();
 
 private:
 	static std::vector<Data*> s_Table;

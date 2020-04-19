@@ -198,6 +198,7 @@
   <ItemGroup>
     <ClInclude Include="lexer.h" />
     <ClInclude Include="parser.h" />
+    <ClInclude Include="src\MemoryLeakTracker.h" />
     <ClInclude Include="src\nodes.h" />
     <ClInclude Include="src\ParseTree.h">
       <SubType>

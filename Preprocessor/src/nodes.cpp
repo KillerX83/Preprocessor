@@ -18,6 +18,28 @@ double FORnode::Action()
 	return 0.0;
 }
 
+void FORnode::Free()
+{
+	if (m_Body != nullptr)
+	{
+		m_Body->Free();
+		delete m_Body;
+	}
+	
+	if (m_EndValue != nullptr)
+	{
+		m_EndValue->Free();
+		delete m_EndValue;
+	}
+	
+	if (m_StartValue != nullptr)
+	{
+		m_StartValue->Free();
+		delete m_StartValue;
+	}
+	
+}
+
 double DEFnode::Action()
 {
 
@@ -29,9 +51,29 @@ double DEFnode::Action()
 	return 0.0;
 }
 
+void DEFnode::Free()
+{
+	if (m_Nextdef != nullptr)
+	{
+		m_Nextdef->Free();
+		delete m_Nextdef;
+	}
+	
+	if (m_Variable != nullptr)
+	{
+		m_Variable->Free();
+		delete m_Variable;
+	}
+	
+}
+
 double VARnode::Action()
 {
 	return SymbolTable::GetValue(m_Id, GetFirstIndex(), GetSecondIndex());
+}
+
+void VARnode::Free()
+{
 }
 
 void VARnode::SetValue(double value)
@@ -46,8 +88,19 @@ double READnode::Action()
 }
 
 
+void READnode::Free()
+{
+	if (m_Variable != nullptr)
+	{
+		m_Variable->Free();
+		delete m_Variable;
+	}
+	
+}
+
 LINEnode::LINEnode(const std::string& str, ASTnode* variable, ASTnode* nextline)
 {
+	m_Nodetype = NODETYPE::LINE;
 	m_Str = str;
 	m_Variable = variable;
 	m_Nextline = nextline;
@@ -64,6 +117,22 @@ double LINEnode::Action()
 	return 0.0;
 }
 
+void LINEnode::Free()
+{
+	if (m_Nextline != nullptr)
+	{
+		m_Nextline->Free();
+		delete m_Nextline;
+	}
+	
+	if (m_Variable != nullptr)
+	{
+		m_Variable->Free();
+		delete m_Variable;
+	}
+	
+}
+
 double LISTnode::Action()
 {
 	if (m_Statement != nullptr)
@@ -71,6 +140,16 @@ double LISTnode::Action()
 	if (m_Nextlist != nullptr)
 		m_Nextlist->Action();
 	return 0.0;
+}
+
+void LISTnode::Free()
+{
+	if (m_Nextlist != nullptr)
+	{
+		m_Nextlist->Free();
+		delete m_Nextlist;
+	}
+	
 }
 
 double NUMnode::Action()
@@ -81,10 +160,29 @@ double NUMnode::Action()
 
 
 
+void NUMnode::Free()
+{
+}
+
 // MATH
 double SUBnode::Action()
 {
 	return m_Left->Action() - m_Right->Action();
+}
+
+void SUBnode::Free()
+{
+	if (m_Left != nullptr)
+	{
+		m_Left->Free();
+		delete m_Left;
+	}
+
+	if (m_Right != nullptr)
+	{
+		m_Right->Free();
+		delete m_Right;
+	}
 }
 
 double SUMnode::Action()
@@ -92,9 +190,39 @@ double SUMnode::Action()
 	return m_Left->Action() + m_Right->Action();
 }
 
+void SUMnode::Free()
+{
+	if (m_Left != nullptr)
+	{
+		m_Left->Free();
+		delete m_Left;
+	}
+
+	if (m_Right!= nullptr)
+	{
+		m_Right->Free();
+		delete m_Right;
+	}
+}
+
 double PRODUCTnode::Action()
 {
 	return m_Left->Action() * m_Right->Action();
+}
+
+void PRODUCTnode::Free()
+{
+	if (m_Left != nullptr)
+	{
+		m_Left->Free();
+		delete m_Left;
+	}
+
+	if (m_Right != nullptr)
+	{
+		m_Right->Free();
+		delete m_Right;
+	}
 }
 
 double DIVnode::Action()
@@ -102,4 +230,18 @@ double DIVnode::Action()
 	return m_Left->Action() / m_Right->Action();
 }
 
+void DIVnode::Free()
+{
+	if (m_Left != nullptr)
+	{
+		m_Left->Free();
+		delete m_Left;
+	}
+
+	if (m_Right != nullptr)
+	{
+		m_Right->Free();
+		delete m_Right;
+	}
+}
 

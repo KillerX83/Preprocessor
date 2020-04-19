@@ -52,12 +52,13 @@ extern int yydebug;
 	#include <cstdio>
 	#include "ParseTree.h"
 	#include "nodes.h"
+	#include "SymbolTable.h"
 
 	typedef void* yyscan_t;
 
 
 
-#line 61 "parser.h"
+#line 62 "parser.h"
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -83,7 +84,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 72 "src\\FlexBisonFiles\\parser.y"
+#line 73 "src\\FlexBisonFiles\\parser.y"
 	
 	ASTnode* a;
 	int intg;
@@ -91,7 +92,7 @@ union YYSTYPE
 	double dbl;
 	NUMTYPE numtype;
 
-#line 95 "parser.h"
+#line 96 "parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

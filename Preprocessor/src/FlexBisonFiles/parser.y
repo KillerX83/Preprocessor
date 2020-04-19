@@ -40,6 +40,7 @@
 	#include <cstdio>
 	#include "ParseTree.h"
 	#include "nodes.h"
+	#include "SymbolTable.h"
 
 	typedef void* yyscan_t;
 
@@ -99,7 +100,7 @@
 %%
 		//TODO: TreeFree
 program: %empty
-	| program statement { $2->Action(); }
+	| program statement { $2->Action(); $2->Free(); delete $2; SymbolTable::Free(); }
 	;
 	
 statement: '#' for identifier '=' expression to expression '\n' list  '\n' { $$ = new FORnode($3, $5, $7, $9); }

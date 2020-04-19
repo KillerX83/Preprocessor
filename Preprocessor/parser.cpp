@@ -106,12 +106,13 @@ extern int yydebug;
 	#include <cstdio>
 	#include "ParseTree.h"
 	#include "nodes.h"
+	#include "SymbolTable.h"
 
 	typedef void* yyscan_t;
 
 
 
-#line 115 "parser.cpp"
+#line 116 "parser.cpp"
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -137,7 +138,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 72 "src\\FlexBisonFiles\\parser.y"
+#line 73 "src\\FlexBisonFiles\\parser.y"
 	
 	ASTnode* a;
 	int intg;
@@ -145,7 +146,7 @@ union YYSTYPE
 	double dbl;
 	NUMTYPE numtype;
 
-#line 149 "parser.cpp"
+#line 150 "parser.cpp"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -175,7 +176,7 @@ int yyparse (yyscan_t scanner, CParseTree* pParseTree);
 
 
 /* Unqualified %code blocks.  */
-#line 51 "src\\FlexBisonFiles\\parser.y"
+#line 52 "src\\FlexBisonFiles\\parser.y"
 
 	
 	typedef void* yyscan_t;
@@ -184,7 +185,7 @@ int yyparse (yyscan_t scanner, CParseTree* pParseTree);
 
 	void yyerror (YYLTYPE*, yyscan_t yyscanner, CParseTree* pParseTree, const char*);
 
-#line 188 "parser.cpp"
+#line 189 "parser.cpp"
 
 #ifdef short
 # undef short
@@ -477,10 +478,10 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,   101,   101,   102,   105,   106,   107,   108,   109,   112,
-     113,   114,   115,   116,   119,   120,   123,   124,   127,   128,
-     129,   130,   131,   132,   133,   134,   138,   139,   142,   143,
-     144
+       0,   102,   102,   103,   106,   107,   108,   109,   110,   113,
+     114,   115,   116,   117,   120,   121,   124,   125,   128,   129,
+     130,   131,   132,   133,   134,   135,   139,   140,   143,   144,
+     145
 };
 #endif
 
@@ -1215,7 +1216,7 @@ YYLTYPE yylloc = yyloc_default;
   yychar = YYEMPTY; /* Cause a token to be read.  */
 
 /* User initialization code.  */
-#line 61 "src\\FlexBisonFiles\\parser.y"
+#line 62 "src\\FlexBisonFiles\\parser.y"
 {
 	/* code for initialization before parsing 
 		code in this block is executed each time yyparse is called. */
@@ -1223,7 +1224,7 @@ YYLTYPE yylloc = yyloc_default;
 		yydebug = 0;
 }
 
-#line 1227 "parser.cpp"
+#line 1228 "parser.cpp"
 
   yylsp[0] = yylloc;
   goto yysetstate;
@@ -1416,175 +1417,175 @@ yyreduce:
   switch (yyn)
     {
   case 3:
-#line 102 "src\\FlexBisonFiles\\parser.y"
-    { (yyvsp[0].a)->Action(); }
-#line 1422 "parser.cpp"
+#line 103 "src\\FlexBisonFiles\\parser.y"
+    { (yyvsp[0].a)->Action(); (yyvsp[0].a)->Free(); delete (yyvsp[0].a); SymbolTable::Free(); }
+#line 1423 "parser.cpp"
     break;
 
   case 4:
-#line 105 "src\\FlexBisonFiles\\parser.y"
+#line 106 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new FORnode((yyvsp[-7].str), (yyvsp[-5].a), (yyvsp[-3].a), (yyvsp[-1].a)); }
-#line 1428 "parser.cpp"
+#line 1429 "parser.cpp"
     break;
 
   case 5:
-#line 106 "src\\FlexBisonFiles\\parser.y"
+#line 107 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = (yyvsp[-1].a); }
-#line 1434 "parser.cpp"
+#line 1435 "parser.cpp"
     break;
 
   case 6:
-#line 107 "src\\FlexBisonFiles\\parser.y"
+#line 108 "src\\FlexBisonFiles\\parser.y"
     {(yyval.a) = (yyvsp[-1].a); }
-#line 1440 "parser.cpp"
+#line 1441 "parser.cpp"
     break;
 
   case 7:
-#line 108 "src\\FlexBisonFiles\\parser.y"
+#line 109 "src\\FlexBisonFiles\\parser.y"
     {(yyval.a) = (yyvsp[0].a); }
-#line 1446 "parser.cpp"
+#line 1447 "parser.cpp"
     break;
 
   case 8:
-#line 109 "src\\FlexBisonFiles\\parser.y"
+#line 110 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new LINEnode("\n", NULL, NULL); }
-#line 1452 "parser.cpp"
+#line 1453 "parser.cpp"
     break;
 
   case 9:
-#line 112 "src\\FlexBisonFiles\\parser.y"
+#line 113 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new LINEnode((yyvsp[-3].str), (yyvsp[-1].a), (yyvsp[0].a)); }
-#line 1458 "parser.cpp"
+#line 1459 "parser.cpp"
     break;
 
   case 10:
-#line 113 "src\\FlexBisonFiles\\parser.y"
+#line 114 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new LINEnode((yyvsp[-2].str), (yyvsp[0].a), NULL); }
-#line 1464 "parser.cpp"
+#line 1465 "parser.cpp"
     break;
 
   case 11:
-#line 114 "src\\FlexBisonFiles\\parser.y"
+#line 115 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new LINEnode((yyvsp[0].str), NULL, NULL); }
-#line 1470 "parser.cpp"
+#line 1471 "parser.cpp"
     break;
 
   case 12:
-#line 115 "src\\FlexBisonFiles\\parser.y"
+#line 116 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new LINEnode("", (yyvsp[-1].a), (yyvsp[0].a)); }
-#line 1476 "parser.cpp"
+#line 1477 "parser.cpp"
     break;
 
   case 13:
-#line 116 "src\\FlexBisonFiles\\parser.y"
+#line 117 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new LINEnode("", (yyvsp[0].a), NULL); }
-#line 1482 "parser.cpp"
+#line 1483 "parser.cpp"
     break;
 
   case 14:
-#line 119 "src\\FlexBisonFiles\\parser.y"
+#line 120 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new DEFnode((yyvsp[-1].a), (yyvsp[0].numtype), NULL); }
-#line 1488 "parser.cpp"
+#line 1489 "parser.cpp"
     break;
 
   case 15:
-#line 120 "src\\FlexBisonFiles\\parser.y"
+#line 121 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new DEFnode((yyvsp[-3].a), (yyvsp[-2].numtype), (yyvsp[0].a)); }
-#line 1494 "parser.cpp"
+#line 1495 "parser.cpp"
     break;
 
   case 16:
-#line 123 "src\\FlexBisonFiles\\parser.y"
+#line 124 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new READnode((yyvsp[0].a), NULL); }
-#line 1500 "parser.cpp"
+#line 1501 "parser.cpp"
     break;
 
   case 17:
-#line 124 "src\\FlexBisonFiles\\parser.y"
+#line 125 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new READnode((yyvsp[-2].a), (yyvsp[0].a)); }
-#line 1506 "parser.cpp"
+#line 1507 "parser.cpp"
     break;
 
   case 18:
-#line 127 "src\\FlexBisonFiles\\parser.y"
+#line 128 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new NUMnode((yyvsp[0].intg), NUMTYPE::INT); }
-#line 1512 "parser.cpp"
+#line 1513 "parser.cpp"
     break;
 
   case 19:
-#line 128 "src\\FlexBisonFiles\\parser.y"
+#line 129 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new NUMnode((yyvsp[0].dbl), NUMTYPE::REAL); }
-#line 1518 "parser.cpp"
+#line 1519 "parser.cpp"
     break;
 
   case 20:
-#line 129 "src\\FlexBisonFiles\\parser.y"
+#line 130 "src\\FlexBisonFiles\\parser.y"
     {(yyval.a) = (yyvsp[0].a); }
-#line 1524 "parser.cpp"
+#line 1525 "parser.cpp"
     break;
 
   case 21:
-#line 130 "src\\FlexBisonFiles\\parser.y"
+#line 131 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new SUMnode((yyvsp[-2].a), (yyvsp[0].a));}
-#line 1530 "parser.cpp"
+#line 1531 "parser.cpp"
     break;
 
   case 22:
-#line 131 "src\\FlexBisonFiles\\parser.y"
+#line 132 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new SUBnode((yyvsp[-2].a), (yyvsp[0].a)); }
-#line 1536 "parser.cpp"
+#line 1537 "parser.cpp"
     break;
 
   case 23:
-#line 132 "src\\FlexBisonFiles\\parser.y"
+#line 133 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new PRODUCTnode((yyvsp[-2].a), (yyvsp[0].a)); }
-#line 1542 "parser.cpp"
+#line 1543 "parser.cpp"
     break;
 
   case 24:
-#line 133 "src\\FlexBisonFiles\\parser.y"
+#line 134 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new DIVnode((yyvsp[-2].a), (yyvsp[0].a)); }
-#line 1548 "parser.cpp"
+#line 1549 "parser.cpp"
     break;
 
   case 25:
-#line 134 "src\\FlexBisonFiles\\parser.y"
+#line 135 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = (yyvsp[-1].a); }
-#line 1554 "parser.cpp"
+#line 1555 "parser.cpp"
     break;
 
   case 26:
-#line 138 "src\\FlexBisonFiles\\parser.y"
+#line 139 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new LISTnode((yyvsp[-1].a), (yyvsp[0].a)); }
-#line 1560 "parser.cpp"
+#line 1561 "parser.cpp"
     break;
 
   case 27:
-#line 139 "src\\FlexBisonFiles\\parser.y"
+#line 140 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new LISTnode(NULL, NULL); }
-#line 1566 "parser.cpp"
+#line 1567 "parser.cpp"
     break;
 
   case 28:
-#line 142 "src\\FlexBisonFiles\\parser.y"
+#line 143 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new VARnode((yyvsp[0].str), NULL, NULL);}
-#line 1572 "parser.cpp"
+#line 1573 "parser.cpp"
     break;
 
   case 29:
-#line 143 "src\\FlexBisonFiles\\parser.y"
+#line 144 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new VARnode((yyvsp[-3].str), (yyvsp[-1].a), NULL);}
-#line 1578 "parser.cpp"
+#line 1579 "parser.cpp"
     break;
 
   case 30:
-#line 144 "src\\FlexBisonFiles\\parser.y"
+#line 145 "src\\FlexBisonFiles\\parser.y"
     { (yyval.a) = new VARnode((yyvsp[-5].str), (yyvsp[-3].a), (yyvsp[-1].a));}
-#line 1584 "parser.cpp"
+#line 1585 "parser.cpp"
     break;
 
 
-#line 1588 "parser.cpp"
+#line 1589 "parser.cpp"
 
       default: break;
     }
@@ -1822,7 +1823,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 148 "src\\FlexBisonFiles\\parser.y"
+#line 149 "src\\FlexBisonFiles\\parser.y"
 
 
 // newer yyerror() function definition
